@@ -1,0 +1,13 @@
+syntax = "proto3";
+package aaa;
+
+import "google/protobuf/empty.proto";
+import "person.proto";
+
+service App {
+    rpc CreatePerson (Person) returns (Person.Id) {}
+    rpc GetPerson (Person.Id) returns (Person) {}
+    rpc GetPersons (Person.Filters) returns (Persons) {}
+    rpc UpdatePerson (Person) returns (Person) {}
+    rpc DeletePerson (Person.Id) returns (google.protobuf.Empty) {}
+}

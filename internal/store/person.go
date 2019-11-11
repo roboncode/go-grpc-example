@@ -1,8 +1,7 @@
-package stores
+package store
 
 import (
 	aaa "aaa/generated"
-	"aaa/internal/models"
 	"context"
 	"fmt"
 	"github.com/golang/protobuf/ptypes"
@@ -17,6 +16,15 @@ import (
 	"time"
 )
 
+type Person struct {
+	Id        primitive.ObjectID `bson:"_id,omitempty"`
+	Name      string             `bson:"name"`
+	Type      int32              `bson:"type"`
+	Enabled   bool               `bson:"enabled"`
+	CreatedAt *time.Time         `bson:"created_at,omitempty"`
+	UpdatedAt *time.Time         `bson:"updated_at,omitempty"`
+}
+
 type PersonStore struct {
 	collection *mongo.Collection
 	aaa.PersonStoreServer
@@ -27,10 +35,10 @@ func (s *PersonStore) Create(ctx context.Context, req *aaa.Person) (*aaa.Person_
 		return nil, status.Errorf(codes.InvalidArgument, err.Error())
 	}
 	var now = time.Now()
-	var doc = models.Person{
-		Enabled:   req.GetEnabled(),
-		Type:      req.GetType(),
+	var doc = Person{
 		Name:      req.GetName(),
+		Type:      req.GetType(),
+		Enabled:   req.GetEnabled(),
 		CreatedAt: &now,
 	}
 	result, err := s.collection.InsertOne(context.Background(), doc)
@@ -52,7 +60,7 @@ func (s *PersonStore) Get(ctx context.Context, req *aaa.Person_Id) (*aaa.Person,
 	}
 	result := s.collection.FindOne(context.Background(), bson.M{"_id": oid})
 	// Create an empty BlogItem to write our decode result to
-	data := models.Person{}
+	data := Person{}
 	// decode and write to data
 	if err := result.Decode(&data); err != nil {
 		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Could not find Person with Object Id %s: %v", req.GetId(), err))
@@ -72,9 +80,9 @@ func (s *PersonStore) Get(ctx context.Context, req *aaa.Person_Id) (*aaa.Person,
 
 	response := &aaa.Person{
 		Id:        oid.Hex(),
-		Enabled:   data.Enabled,
-		Type:      data.Type,
 		Name:      data.Name,
+		Type:      data.Type,
+		Enabled:   data.Enabled,
 		CreatedAt: createdAt,
 		UpdatedAt: updatedAt,
 	}
@@ -88,8 +96,8 @@ func (s *PersonStore) List(ctx context.Context, req *aaa.Person_Filters) (*aaa.P
 	}
 	// collection.Find returns a cursor for our (empty) query
 	cursor, err := s.collection.Find(context.Background(), bson.M{
-		"enabled": req.Enabled,
 		"type":    req.Type,
+		"enabled": req.Enabled,
 	})
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, fmt.Sprintf("Unknown internal error: %v", err))
@@ -102,7 +110,7 @@ func (s *PersonStore) List(ctx context.Context, req *aaa.Person_Filters) (*aaa.P
 	var updatedAt *timestamp.Timestamp
 	// cursor.Next() returns a boolean, if false there are no more items and loop will break
 	for cursor.Next(context.Background()) {
-		var data = &models.Person{}
+		var data = &Person{}
 		// Decode the data at the current pointer and write it to data
 		err := cursor.Decode(data)
 		// check error
@@ -122,9 +130,9 @@ func (s *PersonStore) List(ctx context.Context, req *aaa.Person_Filters) (*aaa.P
 
 		items = append(items, &aaa.Person{
 			Id:        data.Id.Hex(),
-			Enabled:   data.Enabled,
-			Type:      data.Type,
 			Name:      data.Name,
+			Type:      data.Type,
+			Enabled:   data.Enabled,
 			CreatedAt: createdAt,
 			UpdatedAt: updatedAt,
 		})
@@ -147,9 +155,9 @@ func (s *PersonStore) Update(ctx context.Context, req *aaa.Person) (*aaa.Person,
 
 	// Convert the data to be updated into an unordered Bson document
 	update := bson.M{
-		"enabled":    req.GetEnabled(),
-		"type":       req.GetType(),
 		"name":       req.GetName(),
+		"type":       req.GetType(),
+		"enabled":    req.GetEnabled(),
 		"updated_at": time.Now(),
 	}
 
@@ -161,7 +169,7 @@ func (s *PersonStore) Update(ctx context.Context, req *aaa.Person) (*aaa.Person,
 	result := s.collection.FindOneAndUpdate(ctx, filter, bson.M{"$set": update}, options.FindOneAndUpdate().SetReturnDocument(1))
 
 	// Decode result and write it to 'data'
-	data := models.Person{}
+	data := Person{}
 	err = result.Decode(&data)
 	if err != nil {
 		return nil, status.Errorf(
@@ -183,9 +191,9 @@ func (s *PersonStore) Update(ctx context.Context, req *aaa.Person) (*aaa.Person,
 	}
 	return &aaa.Person{
 		Id:        oid.Hex(),
-		Enabled:   data.Enabled,
-		Type:      data.Type,
 		Name:      data.Name,
+		Type:      data.Type,
+		Enabled:   data.Enabled,
 		CreatedAt: createdAt,
 		UpdatedAt: updatedAt,
 	}, nil

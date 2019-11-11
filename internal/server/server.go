@@ -2,20 +2,20 @@ package server
 
 import (
 	aaa "aaa/generated"
-	"aaa/internal/stores"
+	"aaa/internal/store"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type Server struct {
 	aaa.AppServer
-	db *mongo.Database
-	Stores struct{
-		Person *stores.PersonStore
+	db    *mongo.Database
+	Store struct{
+		Person *store.PersonStore
 	}
 }
 
 func (s *Server) InitMongoStore(db *mongo.Database) {
-	s.Stores.Person = stores.NewPersonStore(db)
+	s.Store.Person = store.NewPersonStore(db)
 }
 
 func NewServer() *Server {

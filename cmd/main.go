@@ -5,6 +5,7 @@ import (
 	"aaa/internal/connections"
 	"aaa/internal/grpc"
 	"aaa/internal/server"
+	"aaa/internal/store"
 	"aaa/tools/env"
 	"flag"
 	"fmt"
@@ -17,18 +18,23 @@ var (
 	mongoDatabase    = env.String("AAA_MONGO_DATABASE", "default", "mongo database")
 )
 
-func main() {
-	shutdown := make(chan bool)
-
-	flag.Parse()
-
+func initMongoDb(appServer *server.Server) {
 	mongoClient, err := connections.ConnectToMongo(mongoAddress, mongoPingTimeout)
 	if err != nil {
 		panic(err)
 	}
 
+	db := mongoClient.Database(mongoDatabase)
+	appServer.Store.Person = store.NewPersonStore(db)
+}
+
+func main() {
+	shutdown := make(chan bool)
+
+	flag.Parse()
+
 	appServer := server.NewServer()
-	appServer.InitMongoStore(mongoClient.Database(mongoDatabase))
+	initMongoDb(appServer)
 
 	grpcServer := grpc.NewServer()
 	go func() {

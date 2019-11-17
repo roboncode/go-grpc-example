@@ -22,10 +22,10 @@ func main() {
 
 	// Setup store
 	s := store.NewStore()
-	s.Person = store.NewPersonStore(mongoDriver.Database)
+	s.Set(store.PersonStoreName, store.NewPersonStore(mongoDriver.Database))
 
 	// Setup servers
-	appServer := server.NewServer(s)
+	appServer := server.NewServer(&s)
 	grpcServer := grpc.NewServer()
 	go func() {
 		fmt.Printf("Listening to gRPC on %s\n", api.GrpcAddr)

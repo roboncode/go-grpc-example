@@ -16,6 +16,8 @@ import (
 	"time"
 )
 
+const PersonStoreName = "Person"
+
 type Person struct {
 	Id        primitive.ObjectID `bson:"_id,omitempty"`
 	Name      string             `bson:"name"`

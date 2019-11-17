@@ -1,11 +1,17 @@
 package store
 
-type Store struct {
-	Person *PersonStore
+type Store map[string]interface{}
+
+var singleton = make(Store)
+
+func (s Store) Set(name string, value interface{}) {
+	s[name] = value
 }
 
-var singleton Store
+func (s Store) Get(name string) interface{} {
+	return s[name]
+}
 
-func NewStore() *Store {
-	return &singleton
+func NewStore() Store {
+	return singleton
 }

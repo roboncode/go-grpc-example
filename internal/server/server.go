@@ -7,11 +7,11 @@ import (
 
 type Server struct {
 	aaa.AppServer
-	Store struct {
-		Person *store.PersonStore
-	}
+	Store *store.Store
 }
 
 func NewServer() *Server {
-	return &Server{}
+	return &Server{
+		Store: store.NewStore(),
+	}
 }

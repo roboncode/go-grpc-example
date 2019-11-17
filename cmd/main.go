@@ -16,13 +16,13 @@ func main() {
 
 	flag.Parse()
 
-	// Setup drivers
-	mongoDriver := connections.NewMongoConnection()
-	mongoDriver.Init()
+	// Setup connections
+	mongoConnection := connections.NewMongoConnection()
+	mongoConnection.Init()
 
 	// Setup store
 	s := store.NewStore()
-	s.Set(store.PersonStoreName, store.NewPersonStore(mongoDriver.Database))
+	s.Set(store.PersonStoreName, store.NewPersonStore(mongoConnection.Database))
 
 	// Setup servers
 	appServer := server.NewServer(&s)

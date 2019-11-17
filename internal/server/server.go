@@ -10,8 +10,8 @@ type Server struct {
 	Store *store.Store
 }
 
-func NewServer() *Server {
+func NewServer(store *store.Store) *Server {
 	return &Server{
-		Store: store.NewStore(),
+		Store: store,
 	}
 }

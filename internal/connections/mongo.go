@@ -11,22 +11,26 @@ import (
 )
 
 var (
-	mongoAddress     = env.String("AAA_MONGO_ADDR", "mongodb://localhost:27017", "mongo address")
-	mongoPingTimeout = env.Duration("AAA_MONGO_PING_TIMEOUT", 2, "mongo ping timeout")
-	mongoDatabase    = env.String("AAA_MONGO_DATABASE", "default", "mongo database")
+	MongoAddress     = env.String("AAA_MONGO_ADDR", "mongodb://localhost:27017", "mongo address")
+	MongoPingTimeout = env.Duration("AAA_MONGO_PING_TIMEOUT", 2, "mongo ping timeout")
+	MongoDatabase    = env.String("AAA_MONGO_DATABASE", "default", "mongo database")
 )
 
-//func SetupMongo(appServer *server.Server) {
-//	mongoClient, err := ConnectToMongo(mongoAddress, mongoPingTimeout)
-//	if err != nil {
-//		panic(err)
-//	}
-//
-//	db := mongoClient.Database(mongoDatabase)
-//	appServer.SetStore("Person", store.NewPersonStore(db))
-//}
+type MongoConnection struct {
+	Client   *mongo.Client
+	Database *mongo.Database
+}
 
-func ConnectToMongo(address string, pingTimeout time.Duration) (*mongo.Client, error) {
+func (m *MongoConnection) Init() {
+	mongoClient, err := m.Connect(MongoAddress, MongoPingTimeout)
+	if err != nil {
+		panic(err)
+	}
+	m.Client = mongoClient
+	m.Database = mongoClient.Database(MongoDatabase)
+}
+
+func (m *MongoConnection) Connect(address string, pingTimeout time.Duration) (*mongo.Client, error) {
 	fmt.Print("Connecting to mongo... ")
 	client, err := mongo.NewClient(options.Client().ApplyURI(address))
 	if err != nil {
@@ -47,4 +51,8 @@ func ConnectToMongo(address string, pingTimeout time.Duration) (*mongo.Client, e
 	fmt.Println("success")
 
 	return client, nil
+}
+
+func NewMongoConnection() *MongoConnection {
+	return &MongoConnection{}
 }

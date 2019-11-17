@@ -2,9 +2,10 @@ package main
 
 import (
 	"aaa/api"
-	"aaa/cmd/setup"
+	"aaa/internal/connections"
 	"aaa/internal/grpc"
 	"aaa/internal/server"
+	"aaa/internal/store"
 	"flag"
 	"fmt"
 	"github.com/golang/glog"
@@ -14,9 +15,17 @@ func main() {
 	shutdown := make(chan bool)
 
 	flag.Parse()
-	setup.Mongo()
 
-	appServer := server.NewServer()
+	// Setup drivers
+	mongoDriver := connections.NewMongoConnection()
+	mongoDriver.Init()
+
+	// Setup store
+	s := store.NewStore()
+	s.Person = store.NewPersonStore(mongoDriver.Database)
+
+	// Setup servers
+	appServer := server.NewServer(s)
 	grpcServer := grpc.NewServer()
 	go func() {
 		fmt.Printf("Listening to gRPC on %s\n", api.GrpcAddr)

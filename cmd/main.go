@@ -26,7 +26,7 @@ func main() {
 	s.Set(store.PersonStoreName, store.NewPersonStore(mongoConnection.Database))
 
 	// Setup servers
-	appServer := server.NewServer(&s)
+	appServer := server.NewServer(s)
 	grpcServer := grpc.NewServer()
 	go func() {
 		log.Printf("Listening to gRPC on %s\n", api.GrpcAddr)

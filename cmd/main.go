@@ -7,8 +7,7 @@ import (
 	"aaa/internal/server"
 	"aaa/internal/store"
 	"flag"
-	"fmt"
-	"github.com/golang/glog"
+	"log"
 )
 
 func main() {
@@ -18,7 +17,9 @@ func main() {
 
 	// Setup connections
 	mongoConnection := connections.NewMongoConnection()
-	mongoConnection.Init()
+	if err := mongoConnection.Init(); err != nil {
+		log.Fatalln(err)
+	}
 
 	// Setup store
 	s := store.NewStore()
@@ -28,10 +29,10 @@ func main() {
 	appServer := server.NewServer(&s)
 	grpcServer := grpc.NewServer()
 	go func() {
-		fmt.Printf("Listening to gRPC on %s\n", api.GrpcAddr)
+		log.Printf("Listening to gRPC on %s\n", api.GrpcAddr)
 
 		if err := grpcServer.Serve(appServer); err != nil {
-			glog.Fatalln(err)
+			defer log.Fatalln(err)
 			<-shutdown
 		}
 	}()

@@ -3,10 +3,10 @@ package connections
 import (
 	"aaa/tools/env"
 	"context"
-	"fmt"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
+	"log"
 	"time"
 )
 
@@ -21,20 +21,21 @@ type MongoConnection struct {
 	Database *mongo.Database
 }
 
-func (m *MongoConnection) Init() {
+func (m *MongoConnection) Init() error {
 	mongoClient, err := m.Connect(MongoAddress, MongoPingTimeout)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	m.Client = mongoClient
 	m.Database = mongoClient.Database(MongoDatabase)
+	return nil
 }
 
 func (m *MongoConnection) Connect(address string, pingTimeout time.Duration) (*mongo.Client, error) {
-	fmt.Print("Connecting to mongo... ")
+	log.Print("Connecting to mongo")
 	client, err := mongo.NewClient(options.Client().ApplyURI(address))
 	if err != nil {
-		fmt.Println("error")
+		log.Fatalln("Error connecting to mongo")
 		return nil, err
 	}
 	err = client.Connect(context.Background())
@@ -44,11 +45,11 @@ func (m *MongoConnection) Connect(address string, pingTimeout time.Duration) (*m
 	ctx, _ := context.WithTimeout(context.Background(), pingTimeout*time.Second)
 	err = client.Ping(ctx, readpref.Primary())
 	if err != nil {
-		fmt.Println("error... ping failed")
+		log.Fatalln("Error pinging mongo")
 		return nil, err
 	}
 
-	fmt.Println("success")
+	log.Println("Connected to mongo")
 
 	return client, nil
 }

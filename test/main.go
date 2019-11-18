@@ -6,7 +6,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/fatih/color"
 )
 
 func main() {
@@ -25,8 +24,8 @@ func main() {
 	}
 	id := result.Id
 	fmt.Println("")
-	color.HiMagenta("Create")
-	color.HiMagenta("----------------------------")
+	fmt.Println("Create")
+	fmt.Println("----------------------------")
 	fmt.Println(id)
 
 	// :: Get :: //
@@ -35,8 +34,8 @@ func main() {
 		panic(err)
 	}
 	fmt.Println("")
-	color.HiMagenta("Get")
-	color.HiMagenta("----------------------------")
+	fmt.Println("Get")
+	fmt.Println("----------------------------")
 	var bItem, _ = json.MarshalIndent(item, "", "   ")
 	fmt.Println(string(bItem))
 
@@ -49,8 +48,8 @@ func main() {
 		panic(err)
 	}
 	fmt.Println("")
-	color.HiMagenta("List")
-	color.HiMagenta("----------------------------")
+	fmt.Println("List")
+	fmt.Println("----------------------------")
 	var bList, _ = json.MarshalIndent(listResult, "", "   ")
 	fmt.Println(string(bList))
 
@@ -61,8 +60,8 @@ func main() {
 		panic(err)
 	}
 	fmt.Println("")
-	color.HiMagenta("Update")
-	color.HiMagenta("----------------------------")
+	fmt.Println("Update")
+	fmt.Println("----------------------------")
 	var bUpdated, _ = json.MarshalIndent(updateResult, "", "   ")
 	fmt.Println(string(bUpdated))
 
@@ -72,8 +71,8 @@ func main() {
 		panic(err)
 	}
 	fmt.Println("")
-	color.HiMagenta("Delete")
-	color.HiMagenta("----------------------------")
+	fmt.Println("Delete")
+	fmt.Println("----------------------------")
 	fmt.Println("ok")
 	fmt.Println("")
 }

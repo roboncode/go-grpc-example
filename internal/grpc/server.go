@@ -3,7 +3,6 @@ package grpc
 import (
 	"aaa/api"
 	aaa "aaa/generated"
-	"github.com/golang/glog"
 	"google.golang.org/grpc"
 	"net"
 )
@@ -25,8 +24,6 @@ func (s *Server) Server() *grpc.Server {
 }
 
 func (s *Server) Serve(server aaa.AppServer) error {
-	defer glog.Flush()
-
 	lis, err := net.Listen("tcp", api.GrpcAddr)
 	if err != nil {
 		return err

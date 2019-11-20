@@ -9,7 +9,7 @@ import (
 var conn *grpc.ClientConn
 
 var (
-	GrpcAddr = env.String("PERSON_GRPC_ADDR", ":8080", "gRPC address")
+	GrpcAddr = env.Var("PERSON_GRPC_ADDR").Default(":8080").Desc("gRPC address").String()
 	//HttpAddr = env.String("PERSON_HTTP_ADDR", ":3000", "HTTP address")
 )
 

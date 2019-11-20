@@ -11,9 +11,9 @@ import (
 )
 
 var (
-	MongoAddress     = env.String("AAA_MONGO_ADDR", "mongodb://localhost:27017", "mongo address")
-	MongoPingTimeout = env.Duration("AAA_MONGO_PING_TIMEOUT", 2, "mongo ping timeout")
-	MongoDatabase    = env.String("AAA_MONGO_DATABASE", "default", "mongo database")
+	MongoAddress     = env.Var("AAA_MONGO_ADDR").Default("mongodb://localhost:27017").Desc("mongo address").String()
+	MongoPingTimeout = env.Var("AAA_MONGO_PING_TIMEOUT").Default(2).Desc("mongo ping timeout").Duration()
+	MongoDatabase    = env.Var("AAA_MONGO_DATABASE").Default("default").Desc("mongo database").String()
 )
 
 type MongoConnection struct {

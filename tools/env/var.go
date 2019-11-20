@@ -1,6 +1,7 @@
 package env
 
 import (
+	"log"
 	"os"
 	"strconv"
 	"time"
@@ -16,6 +17,10 @@ func Var(key string) *EnvVar {
 	return &EnvVar{key: key}
 }
 
+func (p *EnvVar) Print(v interface{}) {
+	log.Println("ENV:", p.key, v, "("+p.desc+")")
+}
+
 func (p *EnvVar) Desc(val string) *EnvVar {
 	p.desc = val
 	return p
@@ -28,40 +33,44 @@ func (p *EnvVar) Default(val interface{}) *EnvVar {
 
 func (p *EnvVar) String() string {
 	v := os.Getenv(p.key)
-	if v != "" {
-		return v
+	if v == "" {
+		v = p.defaultValue.(string)
 	}
-	return p.defaultValue.(string)
+	p.Print(v)
+	return v
 }
 
 func (p *EnvVar) Int() int {
 	v, err := strconv.Atoi(os.Getenv(p.key))
-	if err != nil {
-		return v
+	if err == nil {
+		v = p.defaultValue.(int)
 	}
-	return p.defaultValue.(int)
+	p.Print(v)
+	return v
 }
 
 func (p *EnvVar) Bool() bool {
 	v, err := strconv.ParseBool(os.Getenv(p.key))
-	if err != nil {
-		return v
+	if err == nil {
+		v = p.defaultValue.(bool)
 	}
-	return p.defaultValue.(bool)
+	p.Print(v)
+	return v
 }
 
 func (p *EnvVar) Duration() time.Duration {
 	value := os.Getenv(p.key)
-	if value != "" {
-		v, err := strconv.ParseInt(value, 10, 64)
+	v := time.Duration(0)
+	if value == "" {
+		if p.defaultValue != nil {
+			v = time.Duration(p.defaultValue.(int))
+		}
+	} else {
+		i, err := strconv.ParseInt(value, 10, 64)
 		if err == nil {
-			return time.Duration(v)
+			v = time.Duration(i)
 		}
 	}
-
-	if p.defaultValue != nil {
-		return time.Duration(p.defaultValue.(int))
-	}
-
-	return time.Duration(0)
+	p.Print(v)
+	return v
 }

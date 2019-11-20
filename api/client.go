@@ -9,8 +9,8 @@ import (
 var conn *grpc.ClientConn
 
 var (
-	GrpcAddr = env.Var("PERSON_GRPC_ADDR").Default(":8080").Desc("gRPC address").String()
-	//HttpAddr = env.String("PERSON_HTTP_ADDR", ":3000", "HTTP address")
+	GrpcAddr = env.Var("AAA_GRPC_ADDR").Default(":8080").Desc("gRPC address").String()
+	//HttpAddr = env.Var("AAA_HTTP_ADDR").Default(":3000").Desc("HTTP address").String()
 )
 
 func Connect() (aaa.AppClient, error) {

@@ -6,14 +6,11 @@ import (
 	"aaa/internal/grpc"
 	"aaa/internal/server"
 	"aaa/internal/store"
-	"flag"
 	"log"
 )
 
 func main() {
 	shutdown := make(chan bool)
-
-	flag.Parse()
 
 	// Setup connections
 	mongoConnection := connections.NewMongoConnection()

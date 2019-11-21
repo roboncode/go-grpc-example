@@ -1,7 +1,7 @@
 package api
 
 import (
-	aaa "aaa/generated"
+	"aaa/pkg"
 	"aaa/tools/env"
 	"google.golang.org/grpc"
 )
@@ -13,13 +13,13 @@ var (
 	//HttpAddr = env.Var("AAA_HTTP_ADDR").Default(":3000").Desc("HTTP address").String()
 )
 
-func Connect() (aaa.AppClient, error) {
+func Connect() (pkg.AppClient, error) {
 	var err error
 	conn, err = grpc.Dial(GrpcAddr, grpc.WithInsecure())
 	if err != nil {
 		return nil, err
 	}
-	client := aaa.NewAppClient(conn)
+	client := pkg.NewAppClient(conn)
 	return client, nil
 }
 

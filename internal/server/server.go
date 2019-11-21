@@ -1,12 +1,12 @@
 package server
 
 import (
-	aaa "aaa/generated"
 	"aaa/internal/store"
+	"aaa/pkg"
 )
 
 type Server struct {
-	aaa.AppServer
+	pkg.AppServer
 	Store *store.Store
 }
 

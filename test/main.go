@@ -2,7 +2,7 @@ package main
 
 import (
 	"aaa/api"
-	aaa "aaa/generated"
+	"aaa/pkg"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -16,7 +16,7 @@ func main() {
 	}
 
 	// :: Create :: //
-	result, err := client.CreatePerson(context.Background(), &aaa.Person{
+	result, err := client.CreatePerson(context.Background(), &pkg.Person{
 		Name: "My Name",
 	})
 	if err != nil {
@@ -29,7 +29,7 @@ func main() {
 	fmt.Println(id)
 
 	// :: Get :: //
-	item, err := client.GetPerson(context.Background(), &aaa.Person_Id{Id: id})
+	item, err := client.GetPerson(context.Background(), &pkg.Person_Id{Id: id})
 	if err != nil {
 		panic(err)
 	}
@@ -40,7 +40,7 @@ func main() {
 	fmt.Println(string(bItem))
 
 	// :: List :: //
-	listResult, err := client.GetPersons(context.Background(), &aaa.Person_Filters{
+	listResult, err := client.GetPersons(context.Background(), &pkg.Person_Filters{
 		Enabled: false,
 		Type:    0,
 	})
@@ -66,7 +66,7 @@ func main() {
 	fmt.Println(string(bUpdated))
 
 	// :: Delete :: //
-	_, err = client.DeletePerson(context.Background(), &aaa.Person_Id{Id: id})
+	_, err = client.DeletePerson(context.Background(), &pkg.Person_Id{Id: id})
 	if err != nil {
 		panic(err)
 	}

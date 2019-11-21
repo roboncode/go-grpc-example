@@ -2,13 +2,13 @@ package grpc
 
 import (
 	"aaa/api"
-	aaa "aaa/generated"
+	"aaa/pkg"
 	"google.golang.org/grpc"
 	"net"
 )
 
 type Serverer interface {
-	Serve(server aaa.AppServer) error
+	Serve(server pkg.AppServer) error
 	Server() *grpc.Server
 }
 
@@ -23,13 +23,13 @@ func (s *Server) Server() *grpc.Server {
 	return s.gs
 }
 
-func (s *Server) Serve(server aaa.AppServer) error {
+func (s *Server) Serve(server pkg.AppServer) error {
 	lis, err := net.Listen("tcp", api.GrpcAddr)
 	if err != nil {
 		return err
 	}
 
-	aaa.RegisterAppServer(s.Server(), server)
+	pkg.RegisterAppServer(s.Server(), server)
 
 	return s.Server().Serve(lis)
 }

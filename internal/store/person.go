@@ -1,7 +1,7 @@
 package store
 
 import (
-	aaa "aaa/generated"
+	"aaa/pkg"
 	"context"
 	"fmt"
 	"github.com/golang/protobuf/ptypes"
@@ -29,10 +29,10 @@ type Person struct {
 
 type PersonStore struct {
 	collection *mongo.Collection
-	aaa.PersonStoreServer
+	pkg.PersonStoreServer
 }
 
-func (s *PersonStore) Create(ctx context.Context, req *aaa.Person) (*aaa.Person_Id, error) {
+func (s *PersonStore) Create(ctx context.Context, req *pkg.Person) (*pkg.Person_Id, error) {
 	if err := req.Validate(); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, err.Error())
 	}
@@ -47,12 +47,12 @@ func (s *PersonStore) Create(ctx context.Context, req *aaa.Person) (*aaa.Person_
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, err.Error())
 	}
-	return &aaa.Person_Id{
+	return &pkg.Person_Id{
 		Id: result.InsertedID.(primitive.ObjectID).Hex(),
 	}, nil
 }
 
-func (s *PersonStore) Get(ctx context.Context, req *aaa.Person_Id) (*aaa.Person, error) {
+func (s *PersonStore) Get(ctx context.Context, req *pkg.Person_Id) (*pkg.Person, error) {
 	if err := req.Validate(); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, err.Error())
 	}
@@ -80,7 +80,7 @@ func (s *PersonStore) Get(ctx context.Context, req *aaa.Person_Id) (*aaa.Person,
 		}
 	}
 
-	response := &aaa.Person{
+	response := &pkg.Person{
 		Id:        oid.Hex(),
 		Name:      data.Name,
 		Type:      data.Type,
@@ -92,7 +92,7 @@ func (s *PersonStore) Get(ctx context.Context, req *aaa.Person_Id) (*aaa.Person,
 	return response, nil
 }
 
-func (s *PersonStore) List(ctx context.Context, req *aaa.Person_Filters) (*aaa.Persons, error) {
+func (s *PersonStore) List(ctx context.Context, req *pkg.Person_Filters) (*pkg.Persons, error) {
 	if err := req.Validate(); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, err.Error())
 	}
@@ -107,7 +107,7 @@ func (s *PersonStore) List(ctx context.Context, req *aaa.Person_Filters) (*aaa.P
 	// An expression with defer will be called at the end of the function
 	defer cursor.Close(context.Background())
 
-	var items = make([]*aaa.Person, 0)
+	var items = make([]*pkg.Person, 0)
 	var createdAt *timestamp.Timestamp
 	var updatedAt *timestamp.Timestamp
 	// cursor.Next() returns a boolean, if false there are no more items and loop will break
@@ -130,7 +130,7 @@ func (s *PersonStore) List(ctx context.Context, req *aaa.Person_Filters) (*aaa.P
 			}
 		}
 
-		items = append(items, &aaa.Person{
+		items = append(items, &pkg.Person{
 			Id:        data.Id.Hex(),
 			Name:      data.Name,
 			Type:      data.Type,
@@ -139,10 +139,10 @@ func (s *PersonStore) List(ctx context.Context, req *aaa.Person_Filters) (*aaa.P
 			UpdatedAt: updatedAt,
 		})
 	}
-	return &aaa.Persons{Items: items}, nil
+	return &pkg.Persons{Items: items}, nil
 }
 
-func (s *PersonStore) Update(ctx context.Context, req *aaa.Person) (*aaa.Person, error) {
+func (s *PersonStore) Update(ctx context.Context, req *pkg.Person) (*pkg.Person, error) {
 	if err := req.Validate(); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, err.Error())
 	}
@@ -191,7 +191,7 @@ func (s *PersonStore) Update(ctx context.Context, req *aaa.Person) (*aaa.Person,
 			return nil, err
 		}
 	}
-	return &aaa.Person{
+	return &pkg.Person{
 		Id:        oid.Hex(),
 		Name:      data.Name,
 		Type:      data.Type,
@@ -201,7 +201,7 @@ func (s *PersonStore) Update(ctx context.Context, req *aaa.Person) (*aaa.Person,
 	}, nil
 }
 
-func (s *PersonStore) Delete(ctx context.Context, req *aaa.Person_Id) (*empty.Empty, error) {
+func (s *PersonStore) Delete(ctx context.Context, req *pkg.Person_Id) (*empty.Empty, error) {
 	if err := req.Validate(); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, err.Error())
 	}

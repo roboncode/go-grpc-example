@@ -1,5 +1,5 @@
 syntax = "proto3";
-package aaa;
+package pkg;
 
 import "google/protobuf/empty.proto";
 import "person.proto";

@@ -1,13 +1,9 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "app.proto",
+    "title": "person.proto",
     "version": "version not set"
   },
-  "schemes": [
-    "http",
-    "https"
-  ],
   "consumes": [
     "application/json"
   ],
@@ -25,7 +21,7 @@
         }
       }
     },
-    "aaaPerson": {
+    "pkgPerson": {
       "type": "object",
       "properties": {
         "id": {
@@ -52,13 +48,13 @@
         }
       }
     },
-    "aaaPersons": {
+    "pkgPersons": {
       "type": "object",
       "properties": {
         "items": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/aaaPerson"
+            "$ref": "#/definitions/pkgPerson"
           }
         }
       }

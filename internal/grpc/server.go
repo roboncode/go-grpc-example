@@ -3,6 +3,7 @@ package grpc
 import (
 	"aaa/api"
 	"aaa/pkg"
+	"github.com/grpc-ecosystem/go-grpc-prometheus"
 	"google.golang.org/grpc"
 	"net"
 )
@@ -18,7 +19,10 @@ type Server struct {
 
 func (s *Server) Server() *grpc.Server {
 	if s.gs == nil {
-		s.gs = grpc.NewServer()
+		s.gs = grpc.NewServer(
+			grpc.UnaryInterceptor(grpc_prometheus.UnaryServerInterceptor),
+		)
+		grpc_prometheus.Register(s.gs)
 	}
 	return s.gs
 }

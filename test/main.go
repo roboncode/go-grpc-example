@@ -6,13 +6,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 )
 
 func main() {
 	// :: Connect :: //
 	client, err := api.Connect()
 	if err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 
 	// :: Create :: //
@@ -20,7 +21,7 @@ func main() {
 		Name: "My Name",
 	})
 	if err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 	id := result.Id
 	fmt.Println("")
@@ -31,7 +32,7 @@ func main() {
 	// :: Get :: //
 	item, err := client.GetPerson(context.Background(), &pkg.Person_Id{Id: id})
 	if err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 	fmt.Println("")
 	fmt.Println("Get")
@@ -45,7 +46,7 @@ func main() {
 		Type:    0,
 	})
 	if err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 	fmt.Println("")
 	fmt.Println("List")
@@ -57,7 +58,7 @@ func main() {
 	item.Name = "Name Override"
 	updateResult, err := client.UpdatePerson(context.Background(), item)
 	if err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 	fmt.Println("")
 	fmt.Println("Update")
@@ -68,7 +69,7 @@ func main() {
 	// :: Delete :: //
 	_, err = client.DeletePerson(context.Background(), &pkg.Person_Id{Id: id})
 	if err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 	fmt.Println("")
 	fmt.Println("Delete")

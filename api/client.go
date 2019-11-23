@@ -3,10 +3,11 @@ package api
 import (
 	"aaa/pkg"
 	"aaa/tools/env"
+	"aaa/tools/log"
+	"context"
 	"github.com/grpc-ecosystem/go-grpc-middleware/retry"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	"log"
 	"time"
 )
 
@@ -18,13 +19,17 @@ var (
 )
 
 func Connect() (pkg.AppClient, error) {
-	log.Println("Connecting to grpc server...")
+	log.Infoln("connecting to grpc server...")
 	var err error
 	opts := []grpc_retry.CallOption{
 		grpc_retry.WithBackoff(grpc_retry.BackoffExponential(100 * time.Millisecond)),
 		grpc_retry.WithCodes(codes.NotFound, codes.Aborted, codes.Unavailable),
 	}
-	conn, err = grpc.Dial(GrpcAddr,
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	conn, err = grpc.DialContext(ctx, GrpcAddr,
 		grpc.WithBlock(),
 		grpc.WithInsecure(),
 		grpc.WithUnaryInterceptor(grpc_retry.UnaryClientInterceptor(opts...)),

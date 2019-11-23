@@ -6,7 +6,7 @@ import (
 	"aaa/internal/grpc"
 	"aaa/internal/server"
 	"aaa/internal/store"
-	"log"
+	"aaa/tools/log"
 )
 
 func main() {
@@ -27,7 +27,7 @@ func main() {
 	grpcServer := grpc.NewServer()
 
 	go func() {
-		log.Printf("Listening to gRPC on %s\n", api.GrpcAddr)
+		log.Infof("Listening to gRPC on %s\n", api.GrpcAddr)
 
 		if err := grpcServer.Serve(appServer); err != nil {
 			defer log.Fatalln(err)

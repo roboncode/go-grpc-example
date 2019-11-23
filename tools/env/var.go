@@ -1,7 +1,7 @@
 package env
 
 import (
-	"log"
+	"aaa/tools/log"
 	"os"
 	"strconv"
 	"time"
@@ -18,7 +18,7 @@ func Var(key string) *EnvVar {
 }
 
 func (p *EnvVar) Print(v interface{}) {
-	log.Println("ENV:", p.key, v, "("+p.desc+")")
+	log.Infoln(p.desc+":", p.key, v)
 }
 
 func (p *EnvVar) Desc(val string) *EnvVar {

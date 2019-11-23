@@ -3,10 +3,9 @@ package main
 import (
 	"aaa/api"
 	"aaa/pkg"
+	"aaa/tools/log"
 	"context"
 	"encoding/json"
-	"fmt"
-	"log"
 )
 
 func main() {
@@ -24,21 +23,21 @@ func main() {
 		log.Fatalln(err)
 	}
 	id := result.Id
-	fmt.Println("")
-	fmt.Println("Create")
-	fmt.Println("----------------------------")
-	fmt.Println(id)
+	log.Println("")
+	log.Println("Create")
+	log.Println("----------------------------")
+	log.Println(id)
 
 	// :: Get :: //
 	item, err := client.GetPerson(context.Background(), &pkg.Person_Id{Id: id})
 	if err != nil {
 		log.Fatalln(err)
 	}
-	fmt.Println("")
-	fmt.Println("Get")
-	fmt.Println("----------------------------")
+	log.Println("")
+	log.Println("Get")
+	log.Println("----------------------------")
 	var bItem, _ = json.MarshalIndent(item, "", "   ")
-	fmt.Println(string(bItem))
+	log.Println(string(bItem))
 
 	// :: List :: //
 	listResult, err := client.GetPersons(context.Background(), &pkg.Person_Filters{
@@ -48,11 +47,11 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	fmt.Println("")
-	fmt.Println("List")
-	fmt.Println("----------------------------")
+	log.Println("")
+	log.Println("List")
+	log.Println("----------------------------")
 	var bList, _ = json.MarshalIndent(listResult, "", "   ")
-	fmt.Println(string(bList))
+	log.Println(string(bList))
 
 	// :: Update :: //
 	item.Name = "Name Override"
@@ -60,20 +59,20 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	fmt.Println("")
-	fmt.Println("Update")
-	fmt.Println("----------------------------")
+	log.Println("")
+	log.Println("Update")
+	log.Println("----------------------------")
 	var bUpdated, _ = json.MarshalIndent(updateResult, "", "   ")
-	fmt.Println(string(bUpdated))
+	log.Println(string(bUpdated))
 
 	// :: Delete :: //
 	_, err = client.DeletePerson(context.Background(), &pkg.Person_Id{Id: id})
 	if err != nil {
 		log.Fatalln(err)
 	}
-	fmt.Println("")
-	fmt.Println("Delete")
-	fmt.Println("----------------------------")
-	fmt.Println("ok")
-	fmt.Println("")
+	log.Println("")
+	log.Println("Delete")
+	log.Println("----------------------------")
+	log.Println("ok")
+	log.Println("")
 }

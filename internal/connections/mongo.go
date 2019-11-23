@@ -2,11 +2,11 @@ package connections
 
 import (
 	"aaa/tools/env"
+	"aaa/tools/log"
 	"context"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
-	"log"
 	"time"
 )
 
@@ -32,10 +32,10 @@ func (m *MongoConnection) Init() error {
 }
 
 func (m *MongoConnection) Connect(address string, pingTimeout time.Duration) (*mongo.Client, error) {
-	log.Print("Connecting to mongo")
+	log.Infoln("connecting to mongo")
 	client, err := mongo.NewClient(options.Client().ApplyURI(address))
 	if err != nil {
-		log.Fatalln("Error connecting to mongo")
+		log.Fatalln("failed to connect to mongo", err)
 		return nil, err
 	}
 	err = client.Connect(context.Background())
@@ -45,11 +45,11 @@ func (m *MongoConnection) Connect(address string, pingTimeout time.Duration) (*m
 	ctx, _ := context.WithTimeout(context.Background(), pingTimeout*time.Second)
 	err = client.Ping(ctx, readpref.Primary())
 	if err != nil {
-		log.Fatalln("Error pinging mongo")
+		log.Fatalln("mongo health check failed", err)
 		return nil, err
 	}
 
-	log.Println("Connected to mongo")
+	log.Infoln("connected to mongo")
 
 	return client, nil
 }

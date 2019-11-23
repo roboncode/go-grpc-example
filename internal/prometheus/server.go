@@ -2,11 +2,11 @@ package prometheus
 
 import (
 	"aaa/internal/grpc"
+	"aaa/tools/log"
 	"fmt"
 	"github.com/grpc-ecosystem/go-grpc-prometheus"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"log"
 	"net/http"
 )
 
@@ -22,6 +22,9 @@ var (
 	//	Name: "demo_server_say_hello_method_handle_count",
 	//	Help: "Total number of RPCs handled on the server.",
 	//}, []string{"name"})
+
+	//docker run -p 9090:9090 prom/prometheus
+	//docker run -p 9090:9090 -v /tmp/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
 )
 
 func NewServer(grpcServer *grpc.Server) {
@@ -34,7 +37,7 @@ func NewServer(grpcServer *grpc.Server) {
 	// Start your http server for prometheus.
 	go func() {
 		if err := httpServer.ListenAndServe(); err != nil {
-			log.Fatal("Unable to start a http server.")
+			log.Warnln("unable to start prometheus http server")
 		}
 	}()
 }

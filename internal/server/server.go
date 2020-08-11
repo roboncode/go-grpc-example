@@ -1,8 +1,8 @@
 package server
 
 import (
-	"aaa/generated"
-	"aaa/internal/store"
+	"example/generated"
+	"example/internal/store"
 )
 
 type Server struct {

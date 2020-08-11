@@ -12,10 +12,10 @@ RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o aaa cmd/main.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o example cmd/main.go
 
 # final stage
 FROM scratch
-COPY --from=builder /app/aaa /app/
+COPY --from=builder /app/example /app/
 EXPOSE 8080 
-ENTRYPOINT ["/app/aaa"]
+ENTRYPOINT ["/app/example"]

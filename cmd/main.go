@@ -1,12 +1,12 @@
 package main
 
 import (
-	"aaa/api"
-	"aaa/internal/connections"
-	"aaa/internal/grpc"
-	"aaa/internal/server"
-	"aaa/internal/store"
-	"aaa/tools/log"
+	"example/api"
+	"example/internal/connections"
+	"example/internal/grpc"
+	"example/internal/server"
+	"example/internal/store"
+	"example/tools/log"
 )
 
 func main() {

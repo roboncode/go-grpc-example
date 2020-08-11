@@ -1,10 +1,10 @@
 package api
 
 import (
-	"aaa/generated"
-	"aaa/tools/env"
-	"aaa/tools/log"
 	"context"
+	"example/generated"
+	"example/tools/env"
+	"example/tools/log"
 	"github.com/grpc-ecosystem/go-grpc-middleware/retry"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -14,8 +14,8 @@ import (
 var conn *grpc.ClientConn
 
 var (
-	GrpcAddr = env.Var("AAA_GRPC_ADDR").Default(":8080").Desc("gRPC address").String()
-	//HttpAddr = env.Var("AAA_HTTP_ADDR").Default(":3000").Desc("HTTP address").String()
+	GrpcAddr = env.Var("EXAMPLE_GRPC_ADDR").Default(":8080").Desc("gRPC address").String()
+	//HttpAddr = env.Var("EXAMPLE_HTTP_ADDR").Default(":3000").Desc("HTTP address").String()
 )
 
 func Connect() (pkg.AppClient, error) {

@@ -1,8 +1,8 @@
 package prometheus
 
 import (
-	"aaa/internal/grpc"
-	"aaa/tools/log"
+	"example/internal/grpc"
+	"example/tools/log"
 	"fmt"
 	"github.com/grpc-ecosystem/go-grpc-prometheus"
 	"github.com/prometheus/client_golang/prometheus"

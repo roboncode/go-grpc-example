@@ -1,8 +1,8 @@
 package store
 
 import (
-	"aaa/generated"
 	"context"
+	"example/generated"
 	"fmt"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/empty"

@@ -1,11 +1,11 @@
 package main
 
 import (
-	"aaa/api"
-	"aaa/generated"
-	"aaa/tools/log"
 	"context"
 	"encoding/json"
+	"example/api"
+	"example/generated"
+	"example/tools/log"
 )
 
 func main() {

@@ -6,14 +6,14 @@
 
 ```shell script
 go mod download
-go run cmd/aaa/main.go
+go run cmd/example/main.go
 ```
 
 ### Running as docker container
 
 ```shell script
-docker build -t aaa .
-docker run aaa
+docker build -t example .
+docker run example
 ```
 
 ### Running with docker-compose

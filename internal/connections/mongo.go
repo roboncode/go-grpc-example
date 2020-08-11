@@ -1,9 +1,9 @@
 package connections
 
 import (
-	"aaa/tools/env"
-	"aaa/tools/log"
 	"context"
+	"example/tools/env"
+	"example/tools/log"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -11,9 +11,9 @@ import (
 )
 
 var (
-	MongoAddress     = env.Var("AAA_MONGO_ADDR").Default("mongodb://localhost:27017").Desc("mongo address").String()
-	MongoPingTimeout = env.Var("AAA_MONGO_PING_TIMEOUT").Default(2).Desc("mongo ping timeout").Duration()
-	MongoDatabase    = env.Var("AAA_MONGO_DATABASE").Default("default").Desc("mongo database").String()
+	MongoAddress     = env.Var("EXAMPLE_MONGO_ADDR").Default("mongodb://localhost:27017").Desc("mongo address").String()
+	MongoPingTimeout = env.Var("EXAMPLE_MONGO_PING_TIMEOUT").Default(2).Desc("mongo ping timeout").Duration()
+	MongoDatabase    = env.Var("EXAMPLE_MONGO_DATABASE").Default("default").Desc("mongo database").String()
 )
 
 type MongoConnection struct {

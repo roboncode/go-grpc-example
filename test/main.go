@@ -2,7 +2,7 @@ package main
 
 import (
 	"aaa/api"
-	"aaa/pkg"
+	"aaa/generated"
 	"aaa/tools/log"
 	"context"
 	"encoding/json"

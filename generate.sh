@@ -1,12 +1,12 @@
 #!/bin/bash
 
-#mkdir -p ./pkg
+mkdir -p ./generated
 docker pull thethingsindustries/protoc
 docker run --rm -v $(pwd):$(pwd) -w $(pwd) thethingsindustries/protoc \
-  --gogo_out=plugins=grpc:pkg \
-  --grpc-gateway_out=logtostderr=true:pkg \
-  --validate_out="lang=gogo:pkg" \
-  --swagger_out=logtostderr=true:pkg \
+  --gogo_out=plugins=grpc:generated \
+  --grpc-gateway_out=logtostderr=true:generated \
+  --validate_out="lang=go:generated" \
+  --swagger_out=logtostderr=true:generated \
   -Ipkg ./pkg/*.proto
 
-go fmt ./pkg/...
+go fmt ./generated/...

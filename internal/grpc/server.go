@@ -2,7 +2,7 @@ package grpc
 
 import (
 	"aaa/api"
-	"aaa/pkg"
+	"aaa/generated"
 	"github.com/grpc-ecosystem/go-grpc-prometheus"
 	"google.golang.org/grpc"
 	"net"

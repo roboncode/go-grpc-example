@@ -1,7 +1,7 @@
 package api
 
 import (
-	"aaa/pkg"
+	"aaa/generated"
 	"aaa/tools/env"
 	"aaa/tools/log"
 	"context"

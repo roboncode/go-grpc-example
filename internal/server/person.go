@@ -1,8 +1,8 @@
 package server
 
 import (
+	"aaa/generated"
 	"aaa/internal/store"
-	"aaa/pkg"
 	"context"
 	"github.com/golang/protobuf/ptypes/empty"
 )

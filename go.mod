@@ -1,6 +1,6 @@
 module aaa
 
-go 1.13
+go 1.14
 
 require (
 	github.com/envoyproxy/protoc-gen-validate v0.4.0

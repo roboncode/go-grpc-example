@@ -7,6 +7,6 @@ docker run --rm -v $(pwd):$(pwd) -w $(pwd) thethingsindustries/protoc \
   --grpc-gateway_out=logtostderr=true:generated \
   --validate_out="lang=go:generated" \
   --swagger_out=logtostderr=true:generated \
-  -Ipkg ./pkg/*.proto
+  -Iproto ./proto/*.proto
 
 go fmt ./generated/...

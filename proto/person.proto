@@ -11,7 +11,7 @@ option (gogoproto.goproto_unkeyed_all) = false;
 option (gogoproto.goproto_unrecognized_all) = false;
 option (gogoproto.goproto_sizecache_all) = false;
 
-service PersonStore {
+service PersonService {
     rpc CreatePerson (CreatePersonRequest) returns (Person) {
     }
     rpc GetPerson (GetPersonRequest) returns (Person) {

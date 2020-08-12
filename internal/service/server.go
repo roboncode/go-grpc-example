@@ -1,4 +1,4 @@
-package server
+package service
 
 import (
 	"example/generated"
@@ -6,7 +6,7 @@ import (
 )
 
 type Server struct {
-	example.AppServer
+	example.AppServiceServer
 	Store *store.Store
 }
 

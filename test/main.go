@@ -14,7 +14,7 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	client := example.NewAppClient(conn)
+	client := example.NewAppServiceClient(conn)
 
 	// :: Create :: //
 	result, err := client.CreatePerson(context.Background(), &example.CreatePersonRequest{

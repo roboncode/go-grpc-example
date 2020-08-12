@@ -5,7 +5,7 @@ import (
 	"example/internal/connections"
 	"example/internal/grpc"
 	"example/internal/http"
-	"example/internal/server"
+	"example/internal/service"
 	"example/internal/store"
 	"example/tools/log"
 	"github.com/golang/glog"
@@ -25,7 +25,7 @@ func main() {
 	s.Set(store.PersonStoreName, store.NewPersonStore(mongoConnection.Database))
 
 	// Setup servers
-	appServer := server.NewServer(s)
+	appServer := service.NewServer(s)
 	grpcServer := grpc.NewServer()
 
 	go func() {

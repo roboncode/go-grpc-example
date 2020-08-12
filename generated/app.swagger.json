@@ -23,7 +23,7 @@
       "get": {
         "summary": "Returns a list of persons",
         "description": "Returns a list of persons",
-        "operationId": "App_GetPersons",
+        "operationId": "AppService_GetPersons",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -76,7 +76,7 @@
           }
         ],
         "tags": [
-          "App"
+          "AppService"
         ],
         "produces": [
           "application/json"
@@ -85,7 +85,7 @@
       "post": {
         "summary": "Creates a person",
         "description": "Creates a person and return the new Person",
-        "operationId": "App_CreatePerson",
+        "operationId": "AppService_CreatePerson",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -118,7 +118,7 @@
           }
         ],
         "tags": [
-          "App"
+          "AppService"
         ],
         "produces": [
           "application/json"
@@ -129,7 +129,7 @@
       "get": {
         "summary": "Returns a person",
         "description": "Returns a person",
-        "operationId": "App_GetPerson",
+        "operationId": "AppService_GetPerson",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -160,7 +160,7 @@
           }
         ],
         "tags": [
-          "App"
+          "AppService"
         ],
         "produces": [
           "application/json"
@@ -169,7 +169,7 @@
       "delete": {
         "summary": "Deletes a persons",
         "description": "Update a person",
-        "operationId": "App_DeletePerson",
+        "operationId": "AppService_DeletePerson",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -200,7 +200,7 @@
           }
         ],
         "tags": [
-          "App"
+          "AppService"
         ],
         "produces": [
           "application/json"
@@ -209,7 +209,7 @@
       "put": {
         "summary": "Updates a person",
         "description": "Updates a person",
-        "operationId": "App_UpdatePerson",
+        "operationId": "AppService_UpdatePerson",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -248,7 +248,7 @@
           }
         ],
         "tags": [
-          "App"
+          "AppService"
         ],
         "produces": [
           "application/json"

@@ -9,14 +9,15 @@ import (
 )
 
 func main() {
-	// :: Connect :: //
-	client, err := api.Connect()
+	// :: Connect To Client :: //
+	conn, err := api.Connect(api.Address())
 	if err != nil {
 		log.Fatalln(err)
 	}
+	client := example.NewAppClient(conn)
 
 	// :: Create :: //
-	result, err := client.CreatePerson(context.Background(), &pkg.Person{
+	result, err := client.CreatePerson(context.Background(), &example.CreatePersonRequest{
 		Name: "My Name",
 	})
 	if err != nil {
@@ -29,7 +30,7 @@ func main() {
 	log.Println(id)
 
 	// :: Get :: //
-	item, err := client.GetPerson(context.Background(), &pkg.Person_Id{Id: id})
+	item, err := client.GetPerson(context.Background(), &example.GetPersonRequest{Id: id})
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -40,7 +41,7 @@ func main() {
 	log.Println(string(bItem))
 
 	// :: List :: //
-	listResult, err := client.GetPersons(context.Background(), &pkg.Person_Filters{
+	persons, err := client.GetPersons(context.Background(), &example.GetPersonsRequest{
 		Enabled: false,
 		Type:    0,
 	})
@@ -50,12 +51,16 @@ func main() {
 	log.Println("")
 	log.Println("List")
 	log.Println("----------------------------")
-	var bList, _ = json.MarshalIndent(listResult, "", "   ")
+	var bList, _ = json.MarshalIndent(persons, "", "   ")
 	log.Println(string(bList))
 
 	// :: Update :: //
-	item.Name = "Name Override"
-	updateResult, err := client.UpdatePerson(context.Background(), item)
+	updateResult, err := client.UpdatePerson(context.Background(), &example.UpdatePersonRequest{
+		Id:      id,
+		Name:    "Name Override",
+		Enabled: true,
+		Type:    0,
+	})
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -66,7 +71,7 @@ func main() {
 	log.Println(string(bUpdated))
 
 	// :: Delete :: //
-	_, err = client.DeletePerson(context.Background(), &pkg.Person_Id{Id: id})
+	_, err = client.DeletePerson(context.Background(), &example.DeletePersonRequest{Id: id})
 	if err != nil {
 		log.Fatalln(err)
 	}

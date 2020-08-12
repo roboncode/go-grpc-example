@@ -27,7 +27,7 @@ func main() {
 	grpcServer := grpc.NewServer()
 
 	go func() {
-		log.Infof("Listening to gRPC on %s\n", api.GrpcAddr)
+		log.Infof("Listening to gRPC on %s\n", api.Address())
 
 		if err := grpcServer.Serve(appServer); err != nil {
 			defer log.Fatalln(err)

@@ -29,10 +29,9 @@ type Person struct {
 
 type PersonStore struct {
 	collection *mongo.Collection
-	pkg.PersonStoreServer
 }
 
-func (s *PersonStore) Create(ctx context.Context, req *pkg.Person) (*pkg.Person_Id, error) {
+func (s *PersonStore) CreatePerson(_ context.Context, req *example.CreatePersonRequest) (*example.Person, error) {
 	if err := req.Validate(); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, err.Error())
 	}
@@ -47,12 +46,22 @@ func (s *PersonStore) Create(ctx context.Context, req *pkg.Person) (*pkg.Person_
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, err.Error())
 	}
-	return &pkg.Person_Id{
-		Id: result.InsertedID.(primitive.ObjectID).Hex(),
+
+	createdAt, err := ptypes.TimestampProto(now)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, err.Error())
+	}
+
+	return &example.Person{
+		Id:        result.InsertedID.(primitive.ObjectID).Hex(),
+		Name:      req.Name,
+		Enabled:   req.Enabled,
+		Type:      req.Type,
+		CreatedAt: createdAt,
 	}, nil
 }
 
-func (s *PersonStore) Get(ctx context.Context, req *pkg.Person_Id) (*pkg.Person, error) {
+func (s *PersonStore) GetPerson(_ context.Context, req *example.GetPersonRequest) (*example.Person, error) {
 	if err := req.Validate(); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, err.Error())
 	}
@@ -80,7 +89,7 @@ func (s *PersonStore) Get(ctx context.Context, req *pkg.Person_Id) (*pkg.Person,
 		}
 	}
 
-	response := &pkg.Person{
+	response := &example.Person{
 		Id:        oid.Hex(),
 		Name:      data.Name,
 		Type:      data.Type,
@@ -92,7 +101,7 @@ func (s *PersonStore) Get(ctx context.Context, req *pkg.Person_Id) (*pkg.Person,
 	return response, nil
 }
 
-func (s *PersonStore) List(ctx context.Context, req *pkg.Person_Filters) (*pkg.Persons, error) {
+func (s *PersonStore) GetPersons(_ context.Context, req *example.GetPersonsRequest) (*example.Persons, error) {
 	if err := req.Validate(); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, err.Error())
 	}
@@ -107,7 +116,7 @@ func (s *PersonStore) List(ctx context.Context, req *pkg.Person_Filters) (*pkg.P
 	// An expression with defer will be called at the end of the function
 	defer cursor.Close(context.Background())
 
-	var items = make([]*pkg.Person, 0)
+	var items = make([]*example.Person, 0)
 	var createdAt *timestamp.Timestamp
 	var updatedAt *timestamp.Timestamp
 	// cursor.Next() returns a boolean, if false there are no more items and loop will break
@@ -130,7 +139,7 @@ func (s *PersonStore) List(ctx context.Context, req *pkg.Person_Filters) (*pkg.P
 			}
 		}
 
-		items = append(items, &pkg.Person{
+		items = append(items, &example.Person{
 			Id:        data.Id.Hex(),
 			Name:      data.Name,
 			Type:      data.Type,
@@ -139,10 +148,10 @@ func (s *PersonStore) List(ctx context.Context, req *pkg.Person_Filters) (*pkg.P
 			UpdatedAt: updatedAt,
 		})
 	}
-	return &pkg.Persons{Items: items}, nil
+	return &example.Persons{Items: items}, nil
 }
 
-func (s *PersonStore) Update(ctx context.Context, req *pkg.Person) (*pkg.Person, error) {
+func (s *PersonStore) UpdatePerson(_ context.Context, req *example.UpdatePersonRequest) (*empty.Empty, error) {
 	if err := req.Validate(); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, err.Error())
 	}
@@ -168,7 +177,7 @@ func (s *PersonStore) Update(ctx context.Context, req *pkg.Person) (*pkg.Person,
 
 	// Result is the BSON encoded result
 	// To return the updated document instead of original we have to add options.
-	result := s.collection.FindOneAndUpdate(ctx, filter, bson.M{"$set": update}, options.FindOneAndUpdate().SetReturnDocument(1))
+	result := s.collection.FindOneAndUpdate(context.Background(), filter, bson.M{"$set": update}, options.FindOneAndUpdate().SetReturnDocument(1))
 
 	// Decode result and write it to 'data'
 	data := Person{}
@@ -179,29 +188,10 @@ func (s *PersonStore) Update(ctx context.Context, req *pkg.Person) (*pkg.Person,
 			fmt.Sprintf("Could not find Person with supplied ID: %v", err),
 		)
 	}
-	var createdAt *timestamp.Timestamp
-	var updatedAt *timestamp.Timestamp
-	createdAt, err = ptypes.TimestampProto(*data.CreatedAt)
-	if err != nil {
-		return nil, err
-	}
-	if data.UpdatedAt != nil {
-		updatedAt, err = ptypes.TimestampProto(*data.UpdatedAt)
-		if err != nil {
-			return nil, err
-		}
-	}
-	return &pkg.Person{
-		Id:        oid.Hex(),
-		Name:      data.Name,
-		Type:      data.Type,
-		Enabled:   data.Enabled,
-		CreatedAt: createdAt,
-		UpdatedAt: updatedAt,
-	}, nil
+	return &empty.Empty{}, nil
 }
 
-func (s *PersonStore) Delete(ctx context.Context, req *pkg.Person_Id) (*empty.Empty, error) {
+func (s *PersonStore) DeleteRequest(_ context.Context, req *example.DeletePersonRequest) (*empty.Empty, error) {
 	if err := req.Validate(); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, err.Error())
 	}
@@ -209,7 +199,7 @@ func (s *PersonStore) Delete(ctx context.Context, req *pkg.Person_Id) (*empty.Em
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("Could not convert to ObjectId: %v", err))
 	}
-	_, err = s.collection.DeleteOne(ctx, bson.M{"_id": oid})
+	_, err = s.collection.DeleteOne(context.Background(), bson.M{"_id": oid})
 	if err != nil {
 		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Could not find/delete blog with id %s: %v", req.GetId(), err))
 	}

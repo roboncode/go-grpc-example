@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"example/generated"
 	"example/tools/env"
 	"example/tools/log"
 	"github.com/grpc-ecosystem/go-grpc-middleware/retry"
@@ -14,11 +13,15 @@ import (
 var conn *grpc.ClientConn
 
 var (
-	GrpcAddr = env.Var("EXAMPLE_GRPC_ADDR").Default(":8080").Desc("gRPC address").String()
+	grpcAddr = env.Var("EXAMPLE_GRPC_ADDR").Default(":8080").Desc("gRPC address").String()
 	//HttpAddr = env.Var("EXAMPLE_HTTP_ADDR").Default(":3000").Desc("HTTP address").String()
 )
 
-func Connect() (pkg.AppClient, error) {
+func Address() string {
+	return grpcAddr
+}
+
+func Connect(address string) (*grpc.ClientConn, error) {
 	log.Infoln("connecting to grpc server...")
 	var err error
 	opts := []grpc_retry.CallOption{
@@ -29,7 +32,7 @@ func Connect() (pkg.AppClient, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	conn, err = grpc.DialContext(ctx, GrpcAddr,
+	conn, err = grpc.DialContext(ctx, address,
 		grpc.WithBlock(),
 		grpc.WithInsecure(),
 		grpc.WithUnaryInterceptor(grpc_retry.UnaryClientInterceptor(opts...)),
@@ -38,15 +41,5 @@ func Connect() (pkg.AppClient, error) {
 	if err != nil {
 		return nil, err
 	}
-	client := pkg.NewAppClient(conn)
-	return client, nil
-}
-
-func Disconnect() error {
-	if conn != nil {
-		if err := conn.Close(); err != nil {
-			return err
-		}
-	}
-	return nil
+	return conn, nil
 }

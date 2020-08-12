@@ -12,16 +12,7 @@
   ],
   "paths": {},
   "definitions": {
-    "PersonId": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "title": "Check for valid ObjectId"
-        }
-      }
-    },
-    "pkgPerson": {
+    "examplePerson": {
       "type": "object",
       "properties": {
         "id": {
@@ -48,13 +39,13 @@
         }
       }
     },
-    "pkgPersons": {
+    "examplePersons": {
       "type": "object",
       "properties": {
         "items": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/pkgPerson"
+            "$ref": "#/definitions/examplePerson"
           }
         }
       }

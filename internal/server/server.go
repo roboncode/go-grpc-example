@@ -6,7 +6,7 @@ import (
 )
 
 type Server struct {
-	pkg.AppServer
+	example.AppServer
 	Store *store.Store
 }
 

@@ -7,26 +7,26 @@ import (
 	"github.com/golang/protobuf/ptypes/empty"
 )
 
-func (s *Server) PersonStore() *store.PersonStore {
-	return s.Store.Get(store.PersonStoreName).(*store.PersonStore)
+func (p *Server) PersonStore() *store.PersonStore {
+	return p.Store.Get(store.PersonStoreName).(*store.PersonStore)
 }
 
-func (s *Server) CreatePerson(ctx context.Context, req *pkg.Person) (*pkg.Person_Id, error) {
-	return s.PersonStore().Create(ctx, req)
+func (p *Server) CreatePerson(ctx context.Context, req *example.CreatePersonRequest) (*example.Person, error) {
+	return p.PersonStore().CreatePerson(ctx, req)
 }
 
-func (s *Server) GetPerson(ctx context.Context, req *pkg.Person_Id) (*pkg.Person, error) {
-	return s.PersonStore().Get(ctx, req)
+func (p *Server) GetPerson(ctx context.Context, req *example.GetPersonRequest) (*example.Person, error) {
+	return p.PersonStore().GetPerson(ctx, req)
 }
 
-func (s *Server) GetPersons(ctx context.Context, req *pkg.Person_Filters) (*pkg.Persons, error) {
-	return s.PersonStore().List(ctx, req)
+func (p *Server) GetPersons(ctx context.Context, req *example.GetPersonsRequest) (*example.Persons, error) {
+	return p.PersonStore().GetPersons(ctx, req)
 }
 
-func (s *Server) UpdatePerson(ctx context.Context, req *pkg.Person) (*pkg.Person, error) {
-	return s.PersonStore().Update(ctx, req)
+func (p *Server) UpdatePerson(ctx context.Context, req *example.UpdatePersonRequest) (*empty.Empty, error) {
+	return p.PersonStore().UpdatePerson(ctx, req)
 }
 
-func (s *Server) DeletePerson(ctx context.Context, req *pkg.Person_Id) (*empty.Empty, error) {
-	return s.PersonStore().Delete(ctx, req)
+func (p *Server) DeletePerson(ctx context.Context, req *example.DeletePersonRequest) (*empty.Empty, error) {
+	return p.PersonStore().DeleteRequest(ctx, req)
 }

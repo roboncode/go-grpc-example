@@ -1,5 +1,5 @@
 syntax = "proto3";
-package pkg;
+package example;
 
 //import "google/api/annotations.proto";
 import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
@@ -12,11 +12,51 @@ option (gogoproto.goproto_unrecognized_all) = false;
 option (gogoproto.goproto_sizecache_all) = false;
 
 service PersonStore {
-    rpc Create (Person) returns (Person.Id) {}
-    rpc Get (Person.Id) returns (Person) {}
-    rpc List (Person.Filters) returns (Persons) {}
-    rpc Update (Person) returns (Person) {}
-    rpc Delete (Person.Id) returns (google.protobuf.Empty) {}
+    rpc CreatePerson (CreatePersonRequest) returns (Person) {
+    }
+    rpc GetPerson (GetPersonRequest) returns (Person) {
+    }
+    rpc GetPersons (GetPersonsRequest) returns (Persons) {
+    }
+    rpc UpdatePerson (UpdatePersonRequest) returns (Person) {
+    }
+    rpc DeletePerson (DeletePersonRequest) returns (google.protobuf.Empty) {
+    }
+}
+
+message CreatePersonRequest {
+    string id = 1;
+    bool enabled = 2;
+    int32 type = 3;
+    string name = 4;
+
+    enum Type {
+        PENDING = 0;
+        ACTIVE = 1;
+        EXPIRED = 2;
+    }
+}
+
+message GetPersonRequest {
+    string id = 1 [(validate.rules).string.pattern = "^[a-f\\d]{24}$"];
+}
+
+message GetPersonsRequest {
+    bool enabled = 1;
+    int32 type = 2;
+    int32 skip = 3;
+    int32 limit = 4;
+}
+
+message UpdatePersonRequest {
+    string id = 1 [(validate.rules).string.pattern = "^[a-f\\d]{24}$"];
+    bool enabled = 2;
+    int32 type = 3;
+    string name = 4;
+}
+
+message DeletePersonRequest {
+    string id = 1 [(validate.rules).string.pattern = "^[a-f\\d]{24}$"];
 }
 
 message Person {
@@ -32,20 +72,10 @@ message Person {
         ACTIVE = 1;
         EXPIRED = 2;
     }
-
-    message Id {
-        // Check for valid ObjectId
-        string id = 1 [(validate.rules).string.pattern = "^[a-f\\d]{24}$"];
-    }
-
-    message Filters {
-        bool enabled = 1;
-        int32 type = 2;
-        int32 skip = 3;
-        int32 limit = 4;
-    }
 }
 
 message Persons {
     repeated Person items = 1;
 }
+
+

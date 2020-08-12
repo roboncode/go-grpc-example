@@ -9,7 +9,7 @@ import (
 )
 
 type Serverer interface {
-	Serve(server pkg.AppServer) error
+	Serve(server example.AppServer) error
 	Server() *grpc.Server
 }
 
@@ -27,13 +27,13 @@ func (s *Server) Server() *grpc.Server {
 	return s.gs
 }
 
-func (s *Server) Serve(server pkg.AppServer) error {
-	lis, err := net.Listen("tcp", api.GrpcAddr)
+func (s *Server) Serve(server example.AppServer) error {
+	lis, err := net.Listen("tcp", api.Address())
 	if err != nil {
 		return err
 	}
 
-	pkg.RegisterAppServer(s.Server(), server)
+	example.RegisterAppServer(s.Server(), server)
 
 	return s.Server().Serve(lis)
 }

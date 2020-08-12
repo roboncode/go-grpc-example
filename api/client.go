@@ -14,11 +14,15 @@ var conn *grpc.ClientConn
 
 var (
 	grpcAddr = env.Var("EXAMPLE_GRPC_ADDR").Default(":8080").Desc("gRPC address").String()
-	//HttpAddr = env.Var("EXAMPLE_HTTP_ADDR").Default(":3000").Desc("HTTP address").String()
+	httpAddr = env.Var("EXAMPLE_HTTP_ADDR").Default(":3000").Desc("HTTP address").String()
 )
 
-func Address() string {
+func GrpcAddress() string {
 	return grpcAddr
+}
+
+func HttpAddress() string {
+	return httpAddr
 }
 
 func Connect(address string) (*grpc.ClientConn, error) {

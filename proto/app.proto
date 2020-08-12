@@ -1,13 +1,93 @@
 syntax = "proto3";
 package example;
 
+import "protoc-gen-swagger/options/annotations.proto";
+import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "person.proto";
 
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+	info: {
+		title: "Example service"
+		version: "1.0"
+		contact: {
+        name: "Rob Taylor"
+        url: "https://github.com/roboncode/genie-example"
+        email: "roboncode@gmail.com"
+      }
+    }
+    schemes: HTTP
+    consumes: "application/json"
+    produces: "application/json"
+    responses: {
+		key: "404"
+		value: {
+			description: "Returned when the resource does not exist."
+			schema: {
+				json_schema: {
+					type: STRING
+				}
+			}
+		}
+	}
+};
+
 service App {
-    rpc CreatePerson (CreatePersonRequest) returns (Person) {}
-    rpc GetPerson (GetPersonRequest) returns (Person) {}
-    rpc GetPersons (GetPersonsRequest) returns (Persons) {}
-    rpc UpdatePerson (UpdatePersonRequest) returns (google.protobuf.Empty) {}
-    rpc DeletePerson (DeletePersonRequest) returns (google.protobuf.Empty) {}
+    rpc CreatePerson (CreatePersonRequest) returns (Person) {
+        option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+          summary: "Creates a person"
+          description: "Creates a person and return the new Person"
+          consumes: "application/json"
+          produces: "application/json"
+        };
+        option (google.api.http) = {
+            post: "/api/persons"
+            body: "*"
+        };
+    }
+    rpc GetPerson (GetPersonRequest) returns (Person) {
+        option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+          summary: "Returns a person"
+          description: "Returns a person"
+          consumes: "application/json"
+          produces: "application/json"
+        };
+        option (google.api.http) = {
+            get: "/api/persons/{id}"
+        };
+    }
+    rpc GetPersons (GetPersonsRequest) returns (Persons) {
+        option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+          summary: "Returns a list of persons"
+          description: "Returns a list of persons"
+          consumes: "application/json"
+          produces: "application/json"
+        };
+        option (google.api.http) = {
+            get: "/api/persons"
+        };
+    }
+    rpc UpdatePerson (UpdatePersonRequest) returns (google.protobuf.Empty) {
+        option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+          summary: "Updates a person"
+          description: "Updates a person"
+          consumes: "application/json"
+          produces: "application/json"
+        };
+        option (google.api.http) = {
+            put: "/api/persons/{id}"
+            body: "*"
+        };
+    }
+    rpc DeletePerson (DeletePersonRequest) returns (google.protobuf.Empty) {
+        option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+          summary: "Deletes a persons"
+          description: "Update a person"
+          consumes: "application/json"
+          produces: "application/json"
+        };
+        option (google.api.http) = {
+            delete: "/api/persons/{id}"
+        };
+    }
 }

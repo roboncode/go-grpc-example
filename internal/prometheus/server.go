@@ -27,12 +27,12 @@ var (
 	//docker run -p 9090:9090 -v /tmp/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
 )
 
-func NewServer(grpcServer *grpc.Server) {
+func NewServer(grpcServer grpc.Server) {
 	// Create a HTTP server for prometheus.
 	httpServer := &http.Server{Handler: promhttp.HandlerFor(reg, promhttp.HandlerOpts{}), Addr: fmt.Sprintf("0.0.0.0:%d", 9092)}
 
 	// Initialize all metrics.
-	grpcMetrics.InitializeMetrics(grpcServer.Server())
+	grpcMetrics.InitializeMetrics(grpcServer.Instance())
 
 	// Start your http server for prometheus.
 	go func() {

@@ -51,9 +51,9 @@ func (s *PersonStore) CreatePerson(_ context.Context, req *example.CreatePersonR
 
 	return &example.Person{
 		Id:        result.InsertedID.(primitive.ObjectID).Hex(),
-		Name:      req.Name,
-		Enabled:   req.Enabled,
-		Type:      req.Type,
+		Name:      req.GetName(),
+		Enabled:   req.GetEnabled(),
+		Type:      req.GetType(),
 		CreatedAt: createdAt,
 	}, nil
 }
@@ -98,8 +98,8 @@ func (s *PersonStore) GetPerson(_ context.Context, req *example.GetPersonRequest
 func (s *PersonStore) GetPersons(_ context.Context, req *example.GetPersonsRequest) (*example.Persons, error) {
 	// collection.Find returns a cursor for our (empty) query
 	cursor, err := s.collection.Find(context.Background(), bson.M{
-		"type":    req.Type,
-		"enabled": req.Enabled,
+		"type":    req.GetType(),
+		"enabled": req.GetEnabled(),
 	})
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, fmt.Sprintf("Unknown internal error: %v", err))

@@ -9,16 +9,16 @@ import (
 	"net"
 )
 
-type Serverer interface {
+type Server interface {
 	Serve(server example.AppServer) error
-	Server() *grpc.Server
+	Instance() *grpc.Server
 }
 
-type Server struct {
+type server struct {
 	gs *grpc.Server
 }
 
-func (s *Server) Server() *grpc.Server {
+func (s *server) Instance() *grpc.Server {
 	if s.gs == nil {
 		s.gs = grpc.NewServer(
 			grpc.ChainUnaryInterceptor(grpc_prometheus.UnaryServerInterceptor, interceptors.ValidateInterceptor),
@@ -28,17 +28,17 @@ func (s *Server) Server() *grpc.Server {
 	return s.gs
 }
 
-func (s *Server) Serve(server example.AppServer) error {
-	lis, err := net.Listen("tcp", api.Address())
+func (s *server) Serve(server example.AppServer) error {
+	lis, err := net.Listen("tcp", api.GrpcAddress())
 	if err != nil {
 		return err
 	}
 
-	example.RegisterAppServer(s.Server(), server)
+	example.RegisterAppServer(s.Instance(), server)
 
-	return s.Server().Serve(lis)
+	return s.Instance().Serve(lis)
 }
 
-func NewServer() Serverer {
-	return &Server{}
+func NewServer() Server {
+	return &server{}
 }

@@ -3,6 +3,7 @@ package grpc
 import (
 	"example/api"
 	"example/generated"
+	"example/internal/grpc/interceptors"
 	"github.com/grpc-ecosystem/go-grpc-prometheus"
 	"google.golang.org/grpc"
 	"net"
@@ -20,7 +21,7 @@ type Server struct {
 func (s *Server) Server() *grpc.Server {
 	if s.gs == nil {
 		s.gs = grpc.NewServer(
-			grpc.UnaryInterceptor(grpc_prometheus.UnaryServerInterceptor),
+			grpc.ChainUnaryInterceptor(grpc_prometheus.UnaryServerInterceptor, interceptors.ValidateInterceptor),
 		)
 		grpc_prometheus.Register(s.gs)
 	}

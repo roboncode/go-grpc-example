@@ -32,9 +32,6 @@ type PersonStore struct {
 }
 
 func (s *PersonStore) CreatePerson(_ context.Context, req *example.CreatePersonRequest) (*example.Person, error) {
-	if err := req.Validate(); err != nil {
-		return nil, status.Errorf(codes.InvalidArgument, err.Error())
-	}
 	var now = time.Now()
 	var doc = Person{
 		Name:      req.GetName(),
@@ -62,9 +59,6 @@ func (s *PersonStore) CreatePerson(_ context.Context, req *example.CreatePersonR
 }
 
 func (s *PersonStore) GetPerson(_ context.Context, req *example.GetPersonRequest) (*example.Person, error) {
-	if err := req.Validate(); err != nil {
-		return nil, status.Errorf(codes.InvalidArgument, err.Error())
-	}
 	oid, err := primitive.ObjectIDFromHex(req.GetId())
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("Could not convert to ObjectId: %v", err))
@@ -102,9 +96,6 @@ func (s *PersonStore) GetPerson(_ context.Context, req *example.GetPersonRequest
 }
 
 func (s *PersonStore) GetPersons(_ context.Context, req *example.GetPersonsRequest) (*example.Persons, error) {
-	if err := req.Validate(); err != nil {
-		return nil, status.Errorf(codes.InvalidArgument, err.Error())
-	}
 	// collection.Find returns a cursor for our (empty) query
 	cursor, err := s.collection.Find(context.Background(), bson.M{
 		"type":    req.Type,
@@ -152,9 +143,6 @@ func (s *PersonStore) GetPersons(_ context.Context, req *example.GetPersonsReque
 }
 
 func (s *PersonStore) UpdatePerson(_ context.Context, req *example.UpdatePersonRequest) (*empty.Empty, error) {
-	if err := req.Validate(); err != nil {
-		return nil, status.Errorf(codes.InvalidArgument, err.Error())
-	}
 	// Convert the Id string to a MongoDB ObjectId
 	oid, err := primitive.ObjectIDFromHex(req.GetId())
 	if err != nil {
@@ -192,9 +180,6 @@ func (s *PersonStore) UpdatePerson(_ context.Context, req *example.UpdatePersonR
 }
 
 func (s *PersonStore) DeleteRequest(_ context.Context, req *example.DeletePersonRequest) (*empty.Empty, error) {
-	if err := req.Validate(); err != nil {
-		return nil, status.Errorf(codes.InvalidArgument, err.Error())
-	}
 	oid, err := primitive.ObjectIDFromHex(req.GetId())
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("Could not convert to ObjectId: %v", err))

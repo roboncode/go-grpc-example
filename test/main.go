@@ -30,7 +30,7 @@ func main() {
 	log.Println(id)
 
 	// :: Get :: //
-	item, err := client.GetPerson(context.Background(), &example.GetPersonRequest{Id: id})
+	item, err := client.GetPerson(context.Background(), &example.GetPersonRequest{Id: "1"})
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -40,44 +40,44 @@ func main() {
 	var bItem, _ = json.MarshalIndent(item, "", "   ")
 	log.Println(string(bItem))
 
-	// :: List :: //
-	persons, err := client.GetPersons(context.Background(), &example.GetPersonsRequest{
-		Enabled: false,
-		Type:    0,
-	})
-	if err != nil {
-		log.Fatalln(err)
-	}
-	log.Println("")
-	log.Println("List")
-	log.Println("----------------------------")
-	var bList, _ = json.MarshalIndent(persons, "", "   ")
-	log.Println(string(bList))
-
-	// :: Update :: //
-	updateResult, err := client.UpdatePerson(context.Background(), &example.UpdatePersonRequest{
-		Id:      id,
-		Name:    "Name Override",
-		Enabled: true,
-		Type:    0,
-	})
-	if err != nil {
-		log.Fatalln(err)
-	}
-	log.Println("")
-	log.Println("Update")
-	log.Println("----------------------------")
-	var bUpdated, _ = json.MarshalIndent(updateResult, "", "   ")
-	log.Println(string(bUpdated))
-
-	// :: Delete :: //
-	_, err = client.DeletePerson(context.Background(), &example.DeletePersonRequest{Id: id})
-	if err != nil {
-		log.Fatalln(err)
-	}
-	log.Println("")
-	log.Println("Delete")
-	log.Println("----------------------------")
-	log.Println("ok")
-	log.Println("")
+	//// :: List :: //
+	//persons, err := client.GetPersons(context.Background(), &example.GetPersonsRequest{
+	//	Enabled: false,
+	//	Type:    0,
+	//})
+	//if err != nil {
+	//	log.Fatalln(err)
+	//}
+	//log.Println("")
+	//log.Println("List")
+	//log.Println("----------------------------")
+	//var bList, _ = json.MarshalIndent(persons, "", "   ")
+	//log.Println(string(bList))
+	//
+	//// :: Update :: //
+	//updateResult, err := client.UpdatePerson(context.Background(), &example.UpdatePersonRequest{
+	//	Id:      id,
+	//	Name:    "Name Override",
+	//	Enabled: true,
+	//	Type:    0,
+	//})
+	//if err != nil {
+	//	log.Fatalln(err)
+	//}
+	//log.Println("")
+	//log.Println("Update")
+	//log.Println("----------------------------")
+	//var bUpdated, _ = json.MarshalIndent(updateResult, "", "   ")
+	//log.Println(string(bUpdated))
+	//
+	//// :: Delete :: //
+	//_, err = client.DeletePerson(context.Background(), &example.DeletePersonRequest{Id: id})
+	//if err != nil {
+	//	log.Fatalln(err)
+	//}
+	//log.Println("")
+	//log.Println("Delete")
+	//log.Println("----------------------------")
+	//log.Println("ok")
+	//log.Println("")
 }

@@ -18,15 +18,13 @@
         "id": {
           "type": "string"
         },
-        "enabled": {
-          "type": "boolean",
-          "format": "boolean"
-        },
-        "type": {
-          "type": "integer",
-          "format": "int32"
+        "status": {
+          "$ref": "#/definitions/exampleStatus"
         },
         "name": {
+          "type": "string"
+        },
+        "email": {
           "type": "string"
         },
         "createdAt": {
@@ -49,6 +47,16 @@
           }
         }
       }
+    },
+    "exampleStatus": {
+      "type": "string",
+      "enum": [
+        "NO_STATUS",
+        "PENDING",
+        "ACTIVE",
+        "EXPIRED"
+      ],
+      "default": "NO_STATUS"
     },
     "protobufAny": {
       "type": "object",

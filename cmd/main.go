@@ -7,7 +7,7 @@ import (
 	"example/internal/http"
 	"example/internal/service"
 	"example/internal/store"
-	"example/tools/log"
+	"example/util/log"
 	"github.com/golang/glog"
 )
 
@@ -22,7 +22,7 @@ func main() {
 
 	// Setup store
 	s := store.NewStore()
-	s.Set(store.PersonStoreName, store.NewPersonStore(mongoConnection.Database))
+	s.Set(store.PersonStoreName, store.NewPersonStore(mongoConnection.GetDatabase()))
 
 	// Setup servers
 	appServer := service.NewServer(s)

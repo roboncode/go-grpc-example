@@ -7,10 +7,10 @@ import (
 
 type Server struct {
 	example.AppServiceServer
-	Store *store.Store
+	Store store.Store
 }
 
-func NewServer(store *store.Store) *Server {
+func NewServer(store store.Store) *Server {
 	return &Server{
 		Store: store,
 	}

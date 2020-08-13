@@ -44,13 +44,11 @@ func (m *CreatePersonRequest) Validate() error {
 		return nil
 	}
 
-	// no validation rules for Id
-
-	// no validation rules for Enabled
-
-	// no validation rules for Type
+	// no validation rules for Status
 
 	// no validation rules for Name
+
+	// no validation rules for Email
 
 	return nil
 }
@@ -193,9 +191,7 @@ func (m *GetPersonsRequest) Validate() error {
 		return nil
 	}
 
-	// no validation rules for Enabled
-
-	// no validation rules for Type
+	// no validation rules for Status
 
 	// no validation rules for Skip
 
@@ -275,11 +271,11 @@ func (m *UpdatePersonRequest) Validate() error {
 		}
 	}
 
-	// no validation rules for Enabled
-
-	// no validation rules for Type
-
 	// no validation rules for Name
+
+	// no validation rules for Email
+
+	// no validation rules for Status
 
 	return nil
 }
@@ -427,11 +423,11 @@ func (m *Person) Validate() error {
 
 	// no validation rules for Id
 
-	// no validation rules for Enabled
-
-	// no validation rules for Type
+	// no validation rules for Status
 
 	// no validation rules for Name
+
+	// no validation rules for Email
 
 	if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {

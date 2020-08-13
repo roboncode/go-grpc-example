@@ -1,15 +1,20 @@
 package store
 
-type Store map[string]interface{}
+type Store interface {
+	Set(name string, value interface{})
+	Get(name string) interface{}
+}
 
-func (s Store) Set(name string, value interface{}) {
+type store map[string]interface{}
+
+func (s store) Set(name string, value interface{}) {
 	s[name] = value
 }
 
-func (s Store) Get(name string) interface{} {
+func (s store) Get(name string) interface{} {
 	return s[name]
 }
 
-func NewStore() *Store {
-	return &Store{}
+func NewStore() Store {
+	return &store{}
 }

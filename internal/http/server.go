@@ -4,7 +4,7 @@ import (
 	"context"
 	"example/api"
 	example "example/generated"
-	"github.com/golang/glog"
+	"example/util/log"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
 	"net/http"
@@ -18,7 +18,7 @@ type server struct {
 }
 
 func (*server) Serve() error {
-	defer glog.Flush()
+	//defer glog.Flush()
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
@@ -29,6 +29,8 @@ func (*server) Serve() error {
 	if err != nil {
 		return err
 	}
+
+	log.Infof("Listening to HTTP on %s\n", api.HttpAddress())
 
 	return http.ListenAndServe(api.HttpAddress(), mux)
 }

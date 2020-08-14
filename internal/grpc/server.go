@@ -4,6 +4,7 @@ import (
 	"example/api"
 	"example/generated"
 	"example/internal/grpc/interceptors"
+	"example/util/log"
 	"github.com/grpc-ecosystem/go-grpc-prometheus"
 	"google.golang.org/grpc"
 	"net"
@@ -36,6 +37,7 @@ func (s *server) Serve(server example.AppServiceServer) error {
 
 	example.RegisterAppServiceServer(s.Instance(), server)
 
+	log.Infof("Listening to gRPC on %s\n", api.GrpcAddress())
 	return s.Instance().Serve(lis)
 }
 

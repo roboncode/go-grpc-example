@@ -3,7 +3,7 @@ package connections
 import (
 	"context"
 	"example/util/env"
-	"example/util/log"
+	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"

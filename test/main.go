@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"example/api"
 	"example/generated"
-	"example/util/log"
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {

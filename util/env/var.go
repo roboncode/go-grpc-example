@@ -1,7 +1,7 @@
 package env
 
 import (
-	"example/util/log"
+	log "github.com/sirupsen/logrus"
 	"os"
 	"strconv"
 	"time"
@@ -14,6 +14,11 @@ type EnvVar struct {
 }
 
 func Var(key string) *EnvVar {
+	Formatter := new(log.TextFormatter)
+	Formatter.TimestampFormat = "02-01-2006 15:04:05"
+	Formatter.FullTimestamp = true
+	log.SetFormatter(Formatter)
+
 	return &EnvVar{key: key}
 }
 

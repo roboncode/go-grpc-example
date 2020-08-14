@@ -11,4 +11,4 @@ generate:
 	USE_LOCAL=true go generate
 
 checkhealth:
-	$HOME/go/bin/grpc-health-probe -addr=localhost:8080
+	~/go/bin/grpc-health-probe -addr=localhost:8080

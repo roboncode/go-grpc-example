@@ -1,7 +1,6 @@
 package main
 
 import (
-	"example/api"
 	example "example/generated"
 	"example/internal/connections"
 	"example/internal/grpc"
@@ -9,7 +8,7 @@ import (
 	"example/internal/http"
 	"example/internal/service"
 	"example/internal/store"
-	"example/util/log"
+	log "github.com/sirupsen/logrus"
 )
 
 func connectToMongo() connections.MongoConnection {
@@ -31,7 +30,6 @@ func setupAppServer(s store.Store) example.AppServiceServer {
 }
 
 func setupGrpcServer(shutdown <-chan bool, appServiceServer example.AppServiceServer) grpc.Server {
-	log.Infof("Listening to gRPC on %s\n", api.GrpcAddress())
 	grpcServer := grpc.NewServer()
 	go func() {
 		if err := grpcServer.Serve(appServiceServer); err != nil {
@@ -43,7 +41,6 @@ func setupGrpcServer(shutdown <-chan bool, appServiceServer example.AppServiceSe
 }
 
 func setupHealthCheckServer(shutdown <-chan bool, grpcServer grpc.Server) healthcheck.Server {
-	log.Infoln("Listening to HealthCheck")
 	healthCheckServer := healthcheck.NewServer()
 	go func() {
 		if err := healthCheckServer.Serve(grpcServer.Instance()); err != nil {
@@ -56,7 +53,6 @@ func setupHealthCheckServer(shutdown <-chan bool, grpcServer grpc.Server) health
 
 func setupHttpServer(shutdown <-chan bool) http.Server {
 	httpServer := http.NewServer()
-	log.Infof("Listening to HTTP on %s\n", api.HttpAddress())
 	go func() {
 		if err := httpServer.Serve(); err != nil {
 			log.Fatalln(err)

@@ -4,7 +4,6 @@ import (
 	"context"
 	"example/api"
 	example "example/generated"
-	"example/util/log"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
 	"net/http"
@@ -29,8 +28,6 @@ func (*server) Serve() error {
 	if err != nil {
 		return err
 	}
-
-	log.Infof("Listening to HTTP on %s\n", api.HttpAddress())
 
 	return http.ListenAndServe(api.HttpAddress(), mux)
 }

@@ -11,9 +11,9 @@ import (
 )
 
 var (
-	MongoAddress     = env.Var("EXAMPLE_MONGO_ADDR").Default("mongodb://localhost:27017").Desc("mongo address").String()
-	MongoPingTimeout = env.Var("EXAMPLE_MONGO_PING_TIMEOUT").Default(2).Desc("mongo ping timeout").Duration()
-	MongoDatabase    = env.Var("EXAMPLE_MONGO_DATABASE").Default("default").Desc("mongo database").String()
+	MongoAddress     = env.Var("MONGO_ADDR").Default("mongodb://localhost:27017").Desc("mongo address").String()
+	MongoPingTimeout = env.Var("MONGO_PING_TIMEOUT").Default(60).Desc("mongo ping timeout").Duration()
+	MongoDatabase    = env.Var("MONGO_DATABASE").Default("default").Desc("mongo database").String()
 )
 
 type MongoConnection interface {

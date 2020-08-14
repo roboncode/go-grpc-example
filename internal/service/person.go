@@ -4,21 +4,11 @@ import (
 	"context"
 	"example/generated"
 	"example/internal/store"
-	"github.com/golang/protobuf/ptypes"
+	"example/util/transform"
 	"github.com/golang/protobuf/ptypes/empty"
-	"github.com/golang/protobuf/ptypes/timestamp"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"time"
 )
-
-func ToTimestamp(t time.Time) *timestamp.Timestamp {
-	ts, err := ptypes.TimestampProto(t)
-	if err != nil {
-		return nil
-	}
-	return ts
-}
 
 func (p *Server) PersonStore() store.PersonStore {
 	return p.Store.Get(store.PersonStoreName).(store.PersonStore)
@@ -40,8 +30,8 @@ func (p *Server) CreatePerson(_ context.Context, req *example.CreatePersonReques
 		Status:    example.Status(person.Status),
 		Name:      person.Name,
 		Email:     person.Email,
-		CreatedAt: ToTimestamp(*person.CreatedAt),
-		UpdatedAt: ToTimestamp(*person.UpdatedAt),
+		CreatedAt: transform.ToTimestamp(*person.CreatedAt),
+		UpdatedAt: transform.ToTimestamp(*person.UpdatedAt),
 	}, nil
 }
 
@@ -55,8 +45,8 @@ func (p *Server) GetPerson(_ context.Context, req *example.GetPersonRequest) (*e
 		Status:    example.Status(person.Status),
 		Name:      person.Name,
 		Email:     person.Email,
-		CreatedAt: ToTimestamp(*person.CreatedAt),
-		UpdatedAt: ToTimestamp(*person.UpdatedAt),
+		CreatedAt: transform.ToTimestamp(*person.CreatedAt),
+		UpdatedAt: transform.ToTimestamp(*person.UpdatedAt),
 	}, nil
 }
 
@@ -79,8 +69,8 @@ func (p *Server) GetPersons(_ context.Context, req *example.GetPersonsRequest) (
 			Status:    example.Status(person.Status),
 			Name:      person.Name,
 			Email:     person.Email,
-			CreatedAt: ToTimestamp(*person.CreatedAt),
-			UpdatedAt: ToTimestamp(*person.UpdatedAt),
+			CreatedAt: transform.ToTimestamp(*person.CreatedAt),
+			UpdatedAt: transform.ToTimestamp(*person.UpdatedAt),
 		}
 		response.Items = append(response.Items, &item)
 	}

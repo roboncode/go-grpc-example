@@ -1,0 +1,21 @@
+version: '3'
+services:
+
+  mongodb:
+    image: bitnami/mongodb
+    container_name: example_mongo
+    hostname: mongo-server
+    ports:
+      - "27017:27017"
+    restart: always
+
+  service:
+    image: example:v1
+    container_name: example_service
+    ports:
+      - "8080:8080"
+      - "3000:3000"
+    environment:
+      - MONGO_ADDR=mongodb://mongodb:27017
+    depends_on:
+      - mongodb

@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"example/api"
 	"example/generated"
-	"example/tools/log"
+	"example/util/log"
 )
 
 func main() {
@@ -14,7 +14,7 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	client := example.NewAppClient(conn)
+	client := example.NewAppServiceClient(conn)
 
 	// :: Create :: //
 	result, err := client.CreatePerson(context.Background(), &example.CreatePersonRequest{
@@ -25,7 +25,7 @@ func main() {
 	}
 	id := result.Id
 	log.Println("")
-	log.Println("Create")
+	log.Println("Create Person")
 	log.Println("----------------------------")
 	log.Println(id)
 
@@ -35,16 +35,13 @@ func main() {
 		log.Fatalln(err)
 	}
 	log.Println("")
-	log.Println("Get")
+	log.Println("Get Person")
 	log.Println("----------------------------")
 	var bItem, _ = json.MarshalIndent(item, "", "   ")
 	log.Println(string(bItem))
 
 	// :: List :: //
-	persons, err := client.GetPersons(context.Background(), &example.GetPersonsRequest{
-		Enabled: false,
-		Type:    0,
-	})
+	persons, err := client.GetPersons(context.Background(), &example.GetPersonsRequest{})
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -56,16 +53,16 @@ func main() {
 
 	// :: Update :: //
 	updateResult, err := client.UpdatePerson(context.Background(), &example.UpdatePersonRequest{
-		Id:      id,
-		Name:    "Name Override",
-		Enabled: true,
-		Type:    0,
+		Id:     id,
+		Name:   "Name Override",
+		Status: example.Status_ACTIVE,
+		Email:  "override@gmail.com",
 	})
 	if err != nil {
 		log.Fatalln(err)
 	}
 	log.Println("")
-	log.Println("Update")
+	log.Println("Update Person")
 	log.Println("----------------------------")
 	var bUpdated, _ = json.MarshalIndent(updateResult, "", "   ")
 	log.Println(string(bUpdated))
@@ -76,7 +73,7 @@ func main() {
 		log.Fatalln(err)
 	}
 	log.Println("")
-	log.Println("Delete")
+	log.Println("Delete Person")
 	log.Println("----------------------------")
 	log.Println("ok")
 	log.Println("")

@@ -2,8 +2,8 @@ package connections
 
 import (
 	"context"
-	"example/tools/env"
-	"example/tools/log"
+	"example/util/env"
+	"example/util/log"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -11,27 +11,37 @@ import (
 )
 
 var (
-	MongoAddress     = env.Var("EXAMPLE_MONGO_ADDR").Default("mongodb://localhost:27017").Desc("mongo address").String()
-	MongoPingTimeout = env.Var("EXAMPLE_MONGO_PING_TIMEOUT").Default(2).Desc("mongo ping timeout").Duration()
-	MongoDatabase    = env.Var("EXAMPLE_MONGO_DATABASE").Default("default").Desc("mongo database").String()
+	MongoAddress     = env.Var("MONGO_ADDR").Default("mongodb://localhost:27017").Desc("mongo address").String()
+	MongoPingTimeout = env.Var("MONGO_PING_TIMEOUT").Default(60).Desc("mongo ping timeout").Duration()
+	MongoDatabase    = env.Var("MONGO_DATABASE").Default("default").Desc("mongo database").String()
 )
 
-type MongoConnection struct {
-	Client   *mongo.Client
-	Database *mongo.Database
+type MongoConnection interface {
+	Init() error
+	Connect(address string, pingTimeout time.Duration) (*mongo.Client, error)
+	GetDatabase() *mongo.Database
 }
 
-func (m *MongoConnection) Init() error {
+type mongoConnection struct {
+	client   *mongo.Client
+	database *mongo.Database
+}
+
+func (m *mongoConnection) GetDatabase() *mongo.Database {
+	return m.database
+}
+
+func (m *mongoConnection) Init() error {
 	mongoClient, err := m.Connect(MongoAddress, MongoPingTimeout)
 	if err != nil {
 		return err
 	}
-	m.Client = mongoClient
-	m.Database = mongoClient.Database(MongoDatabase)
+	m.client = mongoClient
+	m.database = mongoClient.Database(MongoDatabase)
 	return nil
 }
 
-func (m *MongoConnection) Connect(address string, pingTimeout time.Duration) (*mongo.Client, error) {
+func (m *mongoConnection) Connect(address string, pingTimeout time.Duration) (*mongo.Client, error) {
 	log.Infoln("connecting to mongo")
 	client, err := mongo.NewClient(options.Client().ApplyURI(address))
 	if err != nil {
@@ -54,6 +64,6 @@ func (m *MongoConnection) Connect(address string, pingTimeout time.Duration) (*m
 	return client, nil
 }
 
-func NewMongoConnection() *MongoConnection {
-	return &MongoConnection{}
+func NewMongoConnection() MongoConnection {
+	return &mongoConnection{}
 }

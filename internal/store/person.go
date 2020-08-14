@@ -2,162 +2,108 @@ package store
 
 import (
 	"context"
-	"example/generated"
-	"fmt"
-	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/empty"
-	"github.com/golang/protobuf/ptypes/timestamp"
+	"example/internal/types/fieldtype"
+	"example/internal/types/mongotype"
+	"example/internal/types/objecttype"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"time"
 )
 
 const PersonStoreName = "Person"
 
 type Person struct {
-	Id        primitive.ObjectID `bson:"_id,omitempty"`
-	Name      string             `bson:"name"`
-	Type      int32              `bson:"type"`
-	Enabled   bool               `bson:"enabled"`
-	CreatedAt *time.Time         `bson:"created_at,omitempty"`
-	UpdatedAt *time.Time         `bson:"updated_at,omitempty"`
+	Id        *primitive.ObjectID `bson:"_id,omitempty"`
+	Name      string              `bson:"name"`
+	Email     string              `bson:"email"`
+	Status    int32               `bson:"status"`
+	CreatedAt *time.Time          `bson:"created_at,omitempty"`
+	UpdatedAt *time.Time          `bson:"updated_at,omitempty"`
 }
 
-type PersonStore struct {
+type PersonFilters struct {
+	Status int32 `bson:"status,omitempty"`
+	Skip   int64 `bson:"skip,omitempty"`
+	Limit  int64 `bson:"offset,omitempty"`
+}
+
+type PersonStore interface {
+	CreatePerson(person *Person) error
+	GetPerson(id string) (*Person, error)
+	GetPersons(filters *PersonFilters) ([]Person, error)
+	UpdatePerson(id string, person *Person) error
+	DeleteRequest(id string) error
+}
+
+type personStore struct {
 	collection *mongo.Collection
 }
 
-func (s *PersonStore) CreatePerson(_ context.Context, req *example.CreatePersonRequest) (*example.Person, error) {
+func (s *personStore) CreatePerson(person *Person) error {
 	var now = time.Now()
-	var doc = Person{
-		Name:      req.GetName(),
-		Type:      req.GetType(),
-		Enabled:   req.GetEnabled(),
-		CreatedAt: &now,
-	}
-	result, err := s.collection.InsertOne(context.Background(), doc)
+	person.CreatedAt = &now
+	person.UpdatedAt = &now
+	result, err := s.collection.InsertOne(context.Background(), &person)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error())
+		return err
 	}
-
-	createdAt, err := ptypes.TimestampProto(now)
-	if err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error())
-	}
-
-	return &example.Person{
-		Id:        result.InsertedID.(primitive.ObjectID).Hex(),
-		Name:      req.GetName(),
-		Enabled:   req.GetEnabled(),
-		Type:      req.GetType(),
-		CreatedAt: createdAt,
-	}, nil
+	oid := result.InsertedID.(primitive.ObjectID)
+	person.Id = &oid
+	return nil
 }
 
-func (s *PersonStore) GetPerson(_ context.Context, req *example.GetPersonRequest) (*example.Person, error) {
-	oid, err := primitive.ObjectIDFromHex(req.GetId())
-	if err != nil {
-		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("Could not convert to ObjectId: %v", err))
-	}
-	result := s.collection.FindOne(context.Background(), bson.M{"_id": oid})
-	// Create an empty BlogItem to write our decode result to
-	data := Person{}
-	// decode and write to data
-	if err := result.Decode(&data); err != nil {
-		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Could not find Person with Object Id %s: %v", req.GetId(), err))
-	}
-	var createdAt *timestamp.Timestamp
-	var updatedAt *timestamp.Timestamp
-	createdAt, err = ptypes.TimestampProto(*data.CreatedAt)
+func (s *personStore) GetPerson(id string) (*Person, error) {
+	oid, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
 	}
-	if data.UpdatedAt != nil {
-		updatedAt, err = ptypes.TimestampProto(*data.UpdatedAt)
-		if err != nil {
-			return nil, err
-		}
+	result := s.collection.FindOne(context.Background(), bson.M{fieldtype.Id: oid})
+	var person Person
+	if err := result.Decode(&person); err != nil {
+		//return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Could not find Person with Object Id %s: %v", id), err)
+		return nil, err
 	}
-
-	response := &example.Person{
-		Id:        oid.Hex(),
-		Name:      data.Name,
-		Type:      data.Type,
-		Enabled:   data.Enabled,
-		CreatedAt: createdAt,
-		UpdatedAt: updatedAt,
-	}
-
-	return response, nil
+	return &person, nil
 }
 
-func (s *PersonStore) GetPersons(_ context.Context, req *example.GetPersonsRequest) (*example.Persons, error) {
-	// collection.Find returns a cursor for our (empty) query
-	cursor, err := s.collection.Find(context.Background(), bson.M{
-		"type":    req.GetType(),
-		"enabled": req.GetEnabled(),
-	})
+func (s *personStore) GetPersons(personFilters *PersonFilters) ([]Person, error) {
+	query := bson.M{}
+	if personFilters.Status > 0 {
+		query[fieldtype.Status] = personFilters.Status
+	}
+
+	findOpts := options.FindOptions{}
+	findOpts.SetSkip(personFilters.Skip)
+	findOpts.SetLimit(personFilters.Limit)
+
+	cursor, err := s.collection.Find(context.Background(), query, &findOpts)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, fmt.Sprintf("Unknown internal error: %v", err))
+		return nil, err
 	}
 	// An expression with defer will be called at the end of the function
 	defer cursor.Close(context.Background())
 
-	var items = make([]*example.Person, 0)
-	var createdAt *timestamp.Timestamp
-	var updatedAt *timestamp.Timestamp
+	var persons = make([]Person, 0)
 	// cursor.Next() returns a boolean, if false there are no more items and loop will break
 	for cursor.Next(context.Background()) {
-		var data = &Person{}
+		var person Person
 		// Decode the data at the current pointer and write it to data
-		err := cursor.Decode(data)
+		err := cursor.Decode(&person)
 		// check error
 		if err != nil {
-			return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Could not decode data: %v", err))
+			return nil, err
 		}
-		createdAt, err = ptypes.TimestampProto(*data.CreatedAt)
-		if err != nil {
-			return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Could not decode createdAt: %v", err))
-		}
-		if data.UpdatedAt != nil {
-			updatedAt, err = ptypes.TimestampProto(*data.UpdatedAt)
-			if err != nil {
-				return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Could not decode updatedAt: %v", err))
-			}
-		}
-
-		items = append(items, &example.Person{
-			Id:        data.Id.Hex(),
-			Name:      data.Name,
-			Type:      data.Type,
-			Enabled:   data.Enabled,
-			CreatedAt: createdAt,
-			UpdatedAt: updatedAt,
-		})
+		persons = append(persons, person)
 	}
-	return &example.Persons{Items: items}, nil
+	return persons, nil
 }
 
-func (s *PersonStore) UpdatePerson(_ context.Context, req *example.UpdatePersonRequest) (*empty.Empty, error) {
-	// Convert the Id string to a MongoDB ObjectId
-	oid, err := primitive.ObjectIDFromHex(req.GetId())
+func (s *personStore) UpdatePerson(id string, person *Person) error {
+	oid, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		return nil, status.Errorf(
-			codes.InvalidArgument,
-			fmt.Sprintf("Could not convert the supplied blog id to a MongoDB ObjectId: %v", err),
-		)
-	}
-
-	// Convert the data to be updated into an unordered Bson document
-	update := bson.M{
-		"name":       req.GetName(),
-		"type":       req.GetType(),
-		"enabled":    req.GetEnabled(),
-		"updated_at": time.Now(),
+		return err
 	}
 
 	// Convert the oid into an unordered bson document to search by id
@@ -165,32 +111,29 @@ func (s *PersonStore) UpdatePerson(_ context.Context, req *example.UpdatePersonR
 
 	// Result is the BSON encoded result
 	// To return the updated document instead of original we have to add options.
-	result := s.collection.FindOneAndUpdate(context.Background(), filter, bson.M{"$set": update}, options.FindOneAndUpdate().SetReturnDocument(1))
+	result := s.collection.FindOneAndUpdate(context.Background(), filter, bson.M{mongotype.SET: person}, options.FindOneAndUpdate().SetReturnDocument(1))
 
 	// Decode result and write it to 'data'
 	data := Person{}
 	err = result.Decode(&data)
 	if err != nil {
-		return nil, status.Errorf(
-			codes.NotFound,
-			fmt.Sprintf("Could not find Person with supplied ID: %v", err),
-		)
+		return err
 	}
-	return &empty.Empty{}, nil
+	return nil
 }
 
-func (s *PersonStore) DeleteRequest(_ context.Context, req *example.DeletePersonRequest) (*empty.Empty, error) {
-	oid, err := primitive.ObjectIDFromHex(req.GetId())
+func (s *personStore) DeleteRequest(id string) error {
+	oid, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("Could not convert to ObjectId: %v", err))
+		return err
 	}
-	_, err = s.collection.DeleteOne(context.Background(), bson.M{"_id": oid})
+	_, err = s.collection.DeleteOne(context.Background(), bson.M{fieldtype.Id: oid})
 	if err != nil {
-		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Could not find/delete blog with id %s: %v", req.GetId(), err))
+		return err
 	}
-	return &empty.Empty{}, nil
+	return nil
 }
 
-func NewPersonStore(db *mongo.Database) *PersonStore {
-	return &PersonStore{collection: db.Collection("persons")}
+func NewPersonStore(db *mongo.Database) PersonStore {
+	return &personStore{collection: db.Collection(objecttype.Persons)}
 }

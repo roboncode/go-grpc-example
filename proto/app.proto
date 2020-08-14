@@ -32,7 +32,7 @@ option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
 	}
 };
 
-service App {
+service AppService {
     rpc CreatePerson (CreatePersonRequest) returns (Person) {
         option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
           summary: "Creates a person"

@@ -2,8 +2,8 @@ package api
 
 import (
 	"context"
-	"example/tools/env"
-	"example/tools/log"
+	"example/util/env"
+	"example/util/log"
 	"github.com/grpc-ecosystem/go-grpc-middleware/retry"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"

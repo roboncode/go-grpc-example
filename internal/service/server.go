@@ -1,4 +1,4 @@
-package server
+package service
 
 import (
 	"example/generated"
@@ -6,11 +6,11 @@ import (
 )
 
 type Server struct {
-	example.AppServer
-	Store *store.Store
+	example.AppServiceServer
+	Store store.Store
 }
 
-func NewServer(store *store.Store) *Server {
+func NewServer(store store.Store) *Server {
 	return &Server{
 		Store: store,
 	}

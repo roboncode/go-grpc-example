@@ -1,7 +1,6 @@
 syntax = "proto3";
 package example;
 
-//import "google/api/annotations.proto";
 import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "google/protobuf/empty.proto";
@@ -11,7 +10,7 @@ option (gogoproto.goproto_unkeyed_all) = false;
 option (gogoproto.goproto_unrecognized_all) = false;
 option (gogoproto.goproto_sizecache_all) = false;
 
-service PersonStore {
+service PersonService {
     rpc CreatePerson (CreatePersonRequest) returns (Person) {
     }
     rpc GetPerson (GetPersonRequest) returns (Person) {
@@ -24,17 +23,17 @@ service PersonStore {
     }
 }
 
-message CreatePersonRequest {
-    string id = 1;
-    bool enabled = 2;
-    int32 type = 3;
-    string name = 4;
+enum Status {
+    NO_STATUS = 0;
+    PENDING = 1;
+    ACTIVE = 2;
+    EXPIRED = 3;
+}
 
-    enum Type {
-        PENDING = 0;
-        ACTIVE = 1;
-        EXPIRED = 2;
-    }
+message CreatePersonRequest {
+    Status status = 1;
+    string name = 2;
+    string email = 3;
 }
 
 message GetPersonRequest {
@@ -42,17 +41,16 @@ message GetPersonRequest {
 }
 
 message GetPersonsRequest {
-    bool enabled = 1;
-    int32 type = 2;
-    int32 skip = 3;
-    int32 limit = 4;
+    Status status = 1;
+    int64 skip = 2;
+    int64 limit = 3;
 }
 
 message UpdatePersonRequest {
     string id = 1 [(validate.rules).string.pattern = "^[a-f\\d]{24}$"];
-    bool enabled = 2;
-    int32 type = 3;
-    string name = 4;
+    string name = 2;
+    string email = 3;
+    Status status = 4;
 }
 
 message DeletePersonRequest {
@@ -61,17 +59,11 @@ message DeletePersonRequest {
 
 message Person {
     string id = 1;
-    bool enabled = 2;
-    int32 type = 3;
-    string name = 4;
+    Status status = 2;
+    string name = 3;
+    string email = 4;
     google.protobuf.Timestamp createdAt = 5;
     google.protobuf.Timestamp updatedAt = 6;
-
-    enum Type {
-        PENDING = 0;
-        ACTIVE = 1;
-        EXPIRED = 2;
-    }
 }
 
 message Persons {

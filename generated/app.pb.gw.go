@@ -31,7 +31,7 @@ var _ = runtime.String
 var _ = utilities.NewDoubleArray
 var _ = descriptor.ForMessage
 
-func request_App_CreatePerson_0(ctx context.Context, marshaler runtime.Marshaler, client AppClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_AppService_CreatePerson_0(ctx context.Context, marshaler runtime.Marshaler, client AppServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq CreatePersonRequest
 	var metadata runtime.ServerMetadata
 
@@ -48,7 +48,7 @@ func request_App_CreatePerson_0(ctx context.Context, marshaler runtime.Marshaler
 
 }
 
-func local_request_App_CreatePerson_0(ctx context.Context, marshaler runtime.Marshaler, server AppServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_AppService_CreatePerson_0(ctx context.Context, marshaler runtime.Marshaler, server AppServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq CreatePersonRequest
 	var metadata runtime.ServerMetadata
 
@@ -65,7 +65,7 @@ func local_request_App_CreatePerson_0(ctx context.Context, marshaler runtime.Mar
 
 }
 
-func request_App_GetPerson_0(ctx context.Context, marshaler runtime.Marshaler, client AppClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_AppService_GetPerson_0(ctx context.Context, marshaler runtime.Marshaler, client AppServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq GetPersonRequest
 	var metadata runtime.ServerMetadata
 
@@ -92,7 +92,7 @@ func request_App_GetPerson_0(ctx context.Context, marshaler runtime.Marshaler, c
 
 }
 
-func local_request_App_GetPerson_0(ctx context.Context, marshaler runtime.Marshaler, server AppServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_AppService_GetPerson_0(ctx context.Context, marshaler runtime.Marshaler, server AppServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq GetPersonRequest
 	var metadata runtime.ServerMetadata
 
@@ -120,17 +120,17 @@ func local_request_App_GetPerson_0(ctx context.Context, marshaler runtime.Marsha
 }
 
 var (
-	filter_App_GetPersons_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+	filter_AppService_GetPersons_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
 )
 
-func request_App_GetPersons_0(ctx context.Context, marshaler runtime.Marshaler, client AppClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_AppService_GetPersons_0(ctx context.Context, marshaler runtime.Marshaler, client AppServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq GetPersonsRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_App_GetPersons_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_AppService_GetPersons_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -139,14 +139,14 @@ func request_App_GetPersons_0(ctx context.Context, marshaler runtime.Marshaler, 
 
 }
 
-func local_request_App_GetPersons_0(ctx context.Context, marshaler runtime.Marshaler, server AppServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_AppService_GetPersons_0(ctx context.Context, marshaler runtime.Marshaler, server AppServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq GetPersonsRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_App_GetPersons_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_AppService_GetPersons_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -155,7 +155,7 @@ func local_request_App_GetPersons_0(ctx context.Context, marshaler runtime.Marsh
 
 }
 
-func request_App_UpdatePerson_0(ctx context.Context, marshaler runtime.Marshaler, client AppClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_AppService_UpdatePerson_0(ctx context.Context, marshaler runtime.Marshaler, client AppServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq UpdatePersonRequest
 	var metadata runtime.ServerMetadata
 
@@ -190,7 +190,7 @@ func request_App_UpdatePerson_0(ctx context.Context, marshaler runtime.Marshaler
 
 }
 
-func local_request_App_UpdatePerson_0(ctx context.Context, marshaler runtime.Marshaler, server AppServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_AppService_UpdatePerson_0(ctx context.Context, marshaler runtime.Marshaler, server AppServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq UpdatePersonRequest
 	var metadata runtime.ServerMetadata
 
@@ -225,7 +225,7 @@ func local_request_App_UpdatePerson_0(ctx context.Context, marshaler runtime.Mar
 
 }
 
-func request_App_DeletePerson_0(ctx context.Context, marshaler runtime.Marshaler, client AppClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_AppService_DeletePerson_0(ctx context.Context, marshaler runtime.Marshaler, client AppServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq DeletePersonRequest
 	var metadata runtime.ServerMetadata
 
@@ -252,7 +252,7 @@ func request_App_DeletePerson_0(ctx context.Context, marshaler runtime.Marshaler
 
 }
 
-func local_request_App_DeletePerson_0(ctx context.Context, marshaler runtime.Marshaler, server AppServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_AppService_DeletePerson_0(ctx context.Context, marshaler runtime.Marshaler, server AppServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq DeletePersonRequest
 	var metadata runtime.ServerMetadata
 
@@ -279,12 +279,12 @@ func local_request_App_DeletePerson_0(ctx context.Context, marshaler runtime.Mar
 
 }
 
-// RegisterAppHandlerServer registers the http handlers for service App to "mux".
-// UnaryRPC     :call AppServer directly.
+// RegisterAppServiceHandlerServer registers the http handlers for service AppService to "mux".
+// UnaryRPC     :call AppServiceServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
-func RegisterAppHandlerServer(ctx context.Context, mux *runtime.ServeMux, server AppServer) error {
+func RegisterAppServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server AppServiceServer) error {
 
-	mux.Handle("POST", pattern_App_CreatePerson_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_AppService_CreatePerson_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -293,18 +293,18 @@ func RegisterAppHandlerServer(ctx context.Context, mux *runtime.ServeMux, server
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_App_CreatePerson_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_AppService_CreatePerson_0(rctx, inboundMarshaler, server, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_App_CreatePerson_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_AppService_CreatePerson_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_App_GetPerson_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_AppService_GetPerson_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -313,18 +313,18 @@ func RegisterAppHandlerServer(ctx context.Context, mux *runtime.ServeMux, server
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_App_GetPerson_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_AppService_GetPerson_0(rctx, inboundMarshaler, server, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_App_GetPerson_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_AppService_GetPerson_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_App_GetPersons_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_AppService_GetPersons_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -333,18 +333,18 @@ func RegisterAppHandlerServer(ctx context.Context, mux *runtime.ServeMux, server
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_App_GetPersons_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_AppService_GetPersons_0(rctx, inboundMarshaler, server, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_App_GetPersons_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_AppService_GetPersons_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("PUT", pattern_App_UpdatePerson_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("PUT", pattern_AppService_UpdatePerson_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -353,18 +353,18 @@ func RegisterAppHandlerServer(ctx context.Context, mux *runtime.ServeMux, server
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_App_UpdatePerson_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_AppService_UpdatePerson_0(rctx, inboundMarshaler, server, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_App_UpdatePerson_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_AppService_UpdatePerson_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("DELETE", pattern_App_DeletePerson_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("DELETE", pattern_AppService_DeletePerson_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -373,23 +373,23 @@ func RegisterAppHandlerServer(ctx context.Context, mux *runtime.ServeMux, server
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_App_DeletePerson_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_AppService_DeletePerson_0(rctx, inboundMarshaler, server, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_App_DeletePerson_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_AppService_DeletePerson_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
 	return nil
 }
 
-// RegisterAppHandlerFromEndpoint is same as RegisterAppHandler but
+// RegisterAppServiceHandlerFromEndpoint is same as RegisterAppServiceHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
-func RegisterAppHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
+func RegisterAppServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
 	conn, err := grpc.Dial(endpoint, opts...)
 	if err != nil {
 		return err
@@ -409,23 +409,23 @@ func RegisterAppHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, 
 		}()
 	}()
 
-	return RegisterAppHandler(ctx, mux, conn)
+	return RegisterAppServiceHandler(ctx, mux, conn)
 }
 
-// RegisterAppHandler registers the http handlers for service App to "mux".
+// RegisterAppServiceHandler registers the http handlers for service AppService to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
-func RegisterAppHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
-	return RegisterAppHandlerClient(ctx, mux, NewAppClient(conn))
+func RegisterAppServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	return RegisterAppServiceHandlerClient(ctx, mux, NewAppServiceClient(conn))
 }
 
-// RegisterAppHandlerClient registers the http handlers for service App
-// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "AppClient".
-// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "AppClient"
+// RegisterAppServiceHandlerClient registers the http handlers for service AppService
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "AppServiceClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "AppServiceClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "AppClient" to call the correct interceptors.
-func RegisterAppHandlerClient(ctx context.Context, mux *runtime.ServeMux, client AppClient) error {
+// "AppServiceClient" to call the correct interceptors.
+func RegisterAppServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client AppServiceClient) error {
 
-	mux.Handle("POST", pattern_App_CreatePerson_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_AppService_CreatePerson_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -434,18 +434,18 @@ func RegisterAppHandlerClient(ctx context.Context, mux *runtime.ServeMux, client
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_App_CreatePerson_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_AppService_CreatePerson_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_App_CreatePerson_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_AppService_CreatePerson_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_App_GetPerson_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_AppService_GetPerson_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -454,18 +454,18 @@ func RegisterAppHandlerClient(ctx context.Context, mux *runtime.ServeMux, client
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_App_GetPerson_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_AppService_GetPerson_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_App_GetPerson_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_AppService_GetPerson_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_App_GetPersons_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_AppService_GetPersons_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -474,18 +474,18 @@ func RegisterAppHandlerClient(ctx context.Context, mux *runtime.ServeMux, client
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_App_GetPersons_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_AppService_GetPersons_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_App_GetPersons_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_AppService_GetPersons_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("PUT", pattern_App_UpdatePerson_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("PUT", pattern_AppService_UpdatePerson_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -494,18 +494,18 @@ func RegisterAppHandlerClient(ctx context.Context, mux *runtime.ServeMux, client
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_App_UpdatePerson_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_AppService_UpdatePerson_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_App_UpdatePerson_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_AppService_UpdatePerson_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("DELETE", pattern_App_DeletePerson_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("DELETE", pattern_AppService_DeletePerson_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -514,14 +514,14 @@ func RegisterAppHandlerClient(ctx context.Context, mux *runtime.ServeMux, client
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_App_DeletePerson_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_AppService_DeletePerson_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_App_DeletePerson_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_AppService_DeletePerson_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -529,25 +529,25 @@ func RegisterAppHandlerClient(ctx context.Context, mux *runtime.ServeMux, client
 }
 
 var (
-	pattern_App_CreatePerson_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "persons"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_AppService_CreatePerson_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "persons"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_App_GetPerson_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"api", "persons", "id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_AppService_GetPerson_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"api", "persons", "id"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_App_GetPersons_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "persons"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_AppService_GetPersons_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "persons"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_App_UpdatePerson_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"api", "persons", "id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_AppService_UpdatePerson_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"api", "persons", "id"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_App_DeletePerson_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"api", "persons", "id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_AppService_DeletePerson_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"api", "persons", "id"}, "", runtime.AssumeColonVerbOpt(true)))
 )
 
 var (
-	forward_App_CreatePerson_0 = runtime.ForwardResponseMessage
+	forward_AppService_CreatePerson_0 = runtime.ForwardResponseMessage
 
-	forward_App_GetPerson_0 = runtime.ForwardResponseMessage
+	forward_AppService_GetPerson_0 = runtime.ForwardResponseMessage
 
-	forward_App_GetPersons_0 = runtime.ForwardResponseMessage
+	forward_AppService_GetPersons_0 = runtime.ForwardResponseMessage
 
-	forward_App_UpdatePerson_0 = runtime.ForwardResponseMessage
+	forward_AppService_UpdatePerson_0 = runtime.ForwardResponseMessage
 
-	forward_App_DeletePerson_0 = runtime.ForwardResponseMessage
+	forward_AppService_DeletePerson_0 = runtime.ForwardResponseMessage
 )

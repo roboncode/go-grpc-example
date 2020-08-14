@@ -10,7 +10,7 @@ import (
 )
 
 type Server interface {
-	Serve(server example.AppServer) error
+	Serve(server example.AppServiceServer) error
 	Instance() *grpc.Server
 }
 
@@ -28,13 +28,13 @@ func (s *server) Instance() *grpc.Server {
 	return s.gs
 }
 
-func (s *server) Serve(server example.AppServer) error {
+func (s *server) Serve(server example.AppServiceServer) error {
 	lis, err := net.Listen("tcp", api.GrpcAddress())
 	if err != nil {
 		return err
 	}
 
-	example.RegisterAppServer(s.Instance(), server)
+	example.RegisterAppServiceServer(s.Instance(), server)
 
 	return s.Instance().Serve(lis)
 }

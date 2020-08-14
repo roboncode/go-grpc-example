@@ -1,7 +1,7 @@
 package env
 
 import (
-	"example/tools/log"
+	"example/util/log"
 	"os"
 	"strconv"
 	"time"

@@ -17,7 +17,6 @@ type server struct {
 }
 
 func (*server) Serve() error {
-	//defer glog.Flush()
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()

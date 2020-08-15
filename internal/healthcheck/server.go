@@ -12,16 +12,24 @@ type Server interface {
 }
 
 type server struct {
+	serviceName  string
+	healthServer *health.Server
 }
 
-func (*server) Serve(grpcServer *grpc.Server) error {
-	healthServer := health.NewServer()
-	healthServer.SetServingStatus("", healthpb.HealthCheckResponse_SERVING)
-	healthpb.RegisterHealthServer(grpcServer, healthServer)
-	log.Infoln("healthcheck enabled")
+func (p *server) Serve(grpcServer *grpc.Server) error {
+	healthpb.RegisterHealthServer(grpcServer, p.healthServer)
+	log.Infoln("health check enabled")
 	return nil
 }
 
-func NewServer() Server {
-	return &server{}
+func (p *server) SetStatus(servingStatus healthpb.HealthCheckResponse_ServingStatus) {
+	p.healthServer.SetServingStatus(p.serviceName, servingStatus)
+}
+
+func NewServer(serviceName string) Server {
+	healthServer := health.NewServer()
+	healthServer.SetServingStatus(serviceName, healthpb.HealthCheckResponse_SERVING)
+	return &server{
+		healthServer: healthServer,
+	}
 }

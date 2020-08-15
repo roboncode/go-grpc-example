@@ -11,6 +11,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+const ServiceName = "example"
+
 func connectToMongo() connections.MongoConnection {
 	mongoConnection := connections.NewMongoConnection()
 	if err := mongoConnection.Init(); err != nil {
@@ -41,7 +43,7 @@ func setupGrpcServer(shutdown <-chan bool, appServiceServer example.AppServiceSe
 }
 
 func setupHealthCheckServer(shutdown <-chan bool, grpcServer grpc.Server) healthcheck.Server {
-	healthCheckServer := healthcheck.NewServer()
+	healthCheckServer := healthcheck.NewServer(ServiceName)
 	go func() {
 		if err := healthCheckServer.Serve(grpcServer.Instance()); err != nil {
 			log.Fatalln(err)

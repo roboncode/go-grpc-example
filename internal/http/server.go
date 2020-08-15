@@ -4,7 +4,6 @@ import (
 	"context"
 	"example/api"
 	example "example/generated"
-	"github.com/golang/glog"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
 	"net/http"
@@ -18,7 +17,6 @@ type server struct {
 }
 
 func (*server) Serve() error {
-	defer glog.Flush()
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()

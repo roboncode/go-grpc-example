@@ -3,8 +3,8 @@ package api
 import (
 	"context"
 	"example/util/env"
-	"example/util/log"
 	"github.com/grpc-ecosystem/go-grpc-middleware/retry"
+	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"time"

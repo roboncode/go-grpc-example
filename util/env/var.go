@@ -1,11 +1,13 @@
 package env
 
 import (
-	"example/util/log"
+	log "github.com/sirupsen/logrus"
 	"os"
 	"strconv"
 	"time"
 )
+
+var initialized = false
 
 type EnvVar struct {
 	key          string
@@ -14,6 +16,13 @@ type EnvVar struct {
 }
 
 func Var(key string) *EnvVar {
+	if initialized == false {
+		initialized = true
+		Formatter := new(log.TextFormatter)
+		Formatter.TimestampFormat = "02-01-2006 15:04:05"
+		Formatter.FullTimestamp = true
+		log.SetFormatter(Formatter)
+	}
 	return &EnvVar{key: key}
 }
 
@@ -28,6 +37,24 @@ func (p *EnvVar) Desc(val string) *EnvVar {
 
 func (p *EnvVar) Default(val interface{}) *EnvVar {
 	p.defaultValue = val
+	return p
+}
+
+func (p *EnvVar) Min(val int) *EnvVar {
+	if p.defaultValue == nil {
+		p.defaultValue = val
+	} else if p.defaultValue.(int) < val {
+		p.defaultValue = val
+	}
+	return p
+}
+
+func (p *EnvVar) Max(val int) *EnvVar {
+	if p.defaultValue == nil {
+		p.defaultValue = val
+	} else if p.defaultValue.(int) > val {
+		p.defaultValue = val
+	}
 	return p
 }
 

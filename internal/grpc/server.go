@@ -35,7 +35,6 @@ func (s *server) Serve(server example.AppServiceServer) error {
 	}
 
 	example.RegisterAppServiceServer(s.Instance(), server)
-
 	return s.Instance().Serve(lis)
 }
 

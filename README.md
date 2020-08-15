@@ -49,7 +49,7 @@ go run test/main.go
 
 #### Heath Check (for Kubernetes)
 
+* https://github.com/grpc-ecosystem/grpc-health-probe
 * https://developpaper.com/k8s-and-health-examination-best-practice-of-grpc-service-health-examination/
 * https://github.com/grpc/grpc/blob/master/doc/health-checking.md
-* https://github.com/grpc-ecosystem/grpc-health-probe/
 * https://github.com/grpc/grpc-go/tree/master/health

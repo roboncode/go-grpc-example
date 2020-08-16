@@ -10,11 +10,22 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (p *Server) PersonStore() store.PersonStore {
+type personService struct {
+	example.UnimplementedPersonServiceServer
+	Store store.Store
+}
+
+func NewPersonService(store store.Store) example.PersonServiceServer {
+	return &personService{
+		Store: store,
+	}
+}
+
+func (p *personService) PersonStore() store.PersonStore {
 	return p.Store.Get(store.PersonStoreName).(store.PersonStore)
 }
 
-func (p *Server) CreatePerson(_ context.Context, req *example.CreatePersonRequest) (*example.Person, error) {
+func (p *personService) CreatePerson(_ context.Context, req *example.CreatePersonRequest) (*example.Person, error) {
 	var person = store.Person{
 		Status: int32(req.Status),
 		Name:   req.Name,
@@ -35,7 +46,7 @@ func (p *Server) CreatePerson(_ context.Context, req *example.CreatePersonReques
 	}, nil
 }
 
-func (p *Server) GetPerson(_ context.Context, req *example.GetPersonRequest) (*example.Person, error) {
+func (p *personService) GetPerson(_ context.Context, req *example.GetPersonRequest) (*example.Person, error) {
 	person, err := p.PersonStore().GetPerson(req.Id)
 	if err != nil {
 		return nil, status.Errorf(codes.NotFound, "Could not find Person with Object Id %s: %v", req.Id, err)
@@ -50,7 +61,7 @@ func (p *Server) GetPerson(_ context.Context, req *example.GetPersonRequest) (*e
 	}, nil
 }
 
-func (p *Server) GetPersons(_ context.Context, req *example.GetPersonsRequest) (*example.Persons, error) {
+func (p *personService) GetPersons(_ context.Context, req *example.GetPersonsRequest) (*example.Persons, error) {
 	var filters = store.PersonFilters{
 		Status: int32(req.Status),
 		Skip:   req.Skip,
@@ -77,7 +88,7 @@ func (p *Server) GetPersons(_ context.Context, req *example.GetPersonsRequest) (
 	return &response, nil
 }
 
-func (p *Server) UpdatePerson(_ context.Context, req *example.UpdatePersonRequest) (*empty.Empty, error) {
+func (p *personService) UpdatePerson(_ context.Context, req *example.UpdatePersonRequest) (*empty.Empty, error) {
 	var person = store.Person{
 		Status: int32(req.Status),
 		Name:   req.Name,
@@ -90,7 +101,7 @@ func (p *Server) UpdatePerson(_ context.Context, req *example.UpdatePersonReques
 	return &empty.Empty{}, nil
 }
 
-func (p *Server) DeletePerson(_ context.Context, req *example.DeletePersonRequest) (*empty.Empty, error) {
+func (p *personService) DeletePerson(_ context.Context, req *example.DeletePersonRequest) (*empty.Empty, error) {
 	var err = p.PersonStore().DeleteRequest(req.Id)
 	if err != nil {
 		return nil, status.Errorf(codes.NotFound, "Error deleting person with id {%s}: %v", req.Id, err)

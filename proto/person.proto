@@ -17,7 +17,7 @@ service PersonService {
     }
     rpc GetPersons (GetPersonsRequest) returns (Persons) {
     }
-    rpc UpdatePerson (UpdatePersonRequest) returns (Person) {
+    rpc UpdatePerson (UpdatePersonRequest) returns (google.protobuf.Empty) {
     }
     rpc DeletePerson (DeletePersonRequest) returns (google.protobuf.Empty) {
     }

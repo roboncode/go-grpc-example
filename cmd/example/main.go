@@ -1,40 +1,47 @@
 package main
 
 import (
-	example "example/generated"
-	"example/internal/connections"
+	"example/generated"
+	"example/internal/connectors"
 	"example/internal/grpc"
 	"example/internal/healthcheck"
 	"example/internal/http"
 	"example/internal/service"
 	"example/internal/store"
 	log "github.com/sirupsen/logrus"
+	googleGrpc "google.golang.org/grpc"
 )
 
 const ServiceName = "example"
 
-func connectToMongo() connections.MongoConnection {
-	mongoConnection := connections.NewMongoConnection()
+func connectToMongo() connectors.MongoConnector {
+	mongoConnection := connectors.NewMongoConnection()
 	if err := mongoConnection.Init(); err != nil {
 		log.Fatalln(err)
 	}
 	return mongoConnection
 }
 
-func setupStores(conn connections.MongoConnection) store.Store {
+func setupStores(conn connectors.MongoConnector) store.Store {
 	s := store.NewStore()
 	s.Set(store.PersonStoreName, store.NewPersonStore(conn.GetDatabase()))
 	return s
 }
 
-func setupAppServer(s store.Store) example.AppServiceServer {
-	return service.NewServer(s)
-}
+func startGrpcServer(shutdown <-chan bool, stores store.Store) grpc.Server {
+	var personService = service.NewPersonService(stores)
+	var httpService = service.NewHttpService(personService)
 
-func setupGrpcServer(shutdown <-chan bool, appServiceServer example.AppServiceServer) grpc.Server {
-	grpcServer := grpc.NewServer()
+	var opts = grpc.Options{
+		ServiceRegistration: func(s *googleGrpc.Server) {
+			example.RegisterPersonServiceServer(s, personService)
+			example.RegisterHttpServiceServer(s, httpService)
+		},
+	}
+
+	grpcServer := grpc.NewServer(&opts)
 	go func() {
-		if err := grpcServer.Serve(appServiceServer); err != nil {
+		if err := grpcServer.Serve(); err != nil {
 			defer log.Fatalln(err)
 			<-shutdown
 		}
@@ -42,7 +49,7 @@ func setupGrpcServer(shutdown <-chan bool, appServiceServer example.AppServiceSe
 	return grpcServer
 }
 
-func setupHealthCheckServer(shutdown <-chan bool, grpcServer grpc.Server) healthcheck.Server {
+func startHealthCheckServer(shutdown <-chan bool, grpcServer grpc.Server) healthcheck.Server {
 	healthCheckServer := healthcheck.NewServer(ServiceName)
 	go func() {
 		if err := healthCheckServer.Serve(grpcServer.Instance()); err != nil {
@@ -53,7 +60,7 @@ func setupHealthCheckServer(shutdown <-chan bool, grpcServer grpc.Server) health
 	return healthCheckServer
 }
 
-func setupHttpServer(shutdown <-chan bool) http.Server {
+func startHttpServer(shutdown <-chan bool) http.Server {
 	httpServer := http.NewServer()
 	go func() {
 		if err := httpServer.Serve(); err != nil {
@@ -69,10 +76,9 @@ func main() {
 
 	conn := connectToMongo()
 	stores := setupStores(conn)
-	appServer := setupAppServer(stores)
-	grpcServer := setupGrpcServer(shutdown, appServer)
-	setupHealthCheckServer(shutdown, grpcServer)
-	setupHttpServer(shutdown)
+	grpcServer := startGrpcServer(shutdown, stores)
+	startHealthCheckServer(shutdown, grpcServer)
+	startHttpServer(shutdown)
 
 	<-shutdown
 }

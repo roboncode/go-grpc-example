@@ -6,7 +6,7 @@ if [[ ${HOST_DIR} ]]; then
    path=${HOST_DIR}
 fi
 
-USE_LOCAL=${USE_LOCAL:-false}
+USE_LOCAL=${USE_LOCAL:-true}
 
 if [ "${USE_LOCAL}" = false ]; then
   docker pull vektra/mockery

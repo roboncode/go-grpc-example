@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	example "example/generated"
+	"example/generated"
 	"example/internal/store"
 	"example/internal/store/mocks"
 	"example/util/transform"
@@ -49,13 +49,13 @@ func newPersonStore() store.PersonStore {
 
 type TestServiceSuite struct {
 	suite.Suite
-	server example.AppServiceServer
+	server example.PersonServiceServer
 }
 
 func (p *TestServiceSuite) SetupTest() {
 	var personStore = store.NewStore()
 	personStore.Set(store.PersonStoreName, newPersonStore())
-	p.server = NewServer(personStore)
+	p.server = NewPersonService(personStore)
 }
 
 func (p *TestServiceSuite) TestCreatePerson() {

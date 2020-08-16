@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"example/api"
-	example "example/generated"
+	"example/generated"
 	"example/util/check"
 	"fmt"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -30,7 +30,7 @@ func (*server) Serve() error {
 
 	mux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithInsecure()}
-	err := example.RegisterAppServiceHandlerFromEndpoint(ctx, mux, api.GrpcAddress(), opts)
+	err := example.RegisterHttpServiceHandlerFromEndpoint(ctx, mux, api.GrpcAddress(), opts)
 	if err != nil {
 		return err
 	}

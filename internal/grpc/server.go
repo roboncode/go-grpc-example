@@ -3,7 +3,6 @@ package grpc
 import (
 	"errors"
 	"example/api"
-	"example/generated"
 	"example/internal/grpc/interceptors"
 	"example/util/check"
 	"fmt"
@@ -12,13 +11,18 @@ import (
 	"net"
 )
 
+type Options struct {
+	ServiceRegistration func(s *grpc.Server)
+}
+
 type Server interface {
-	Serve(server example.AppServiceServer) error
+	Serve() error
 	Instance() *grpc.Server
 }
 
 type server struct {
-	gs *grpc.Server
+	gs      *grpc.Server
+	options *Options
 }
 
 func (s *server) Instance() *grpc.Server {
@@ -31,7 +35,7 @@ func (s *server) Instance() *grpc.Server {
 	return s.gs
 }
 
-func (s *server) Serve(server example.AppServiceServer) error {
+func (s *server) Serve() error {
 	if check.PortAvailable(api.GrpcPort()) == false {
 		return errors.New(fmt.Sprintf("GRPC address %s is in use", api.GrpcAddress()))
 	}
@@ -41,10 +45,14 @@ func (s *server) Serve(server example.AppServiceServer) error {
 		return err
 	}
 
-	example.RegisterAppServiceServer(s.Instance(), server)
+	grpcServer := s.Instance()
+	s.options.ServiceRegistration(grpcServer)
+
 	return s.Instance().Serve(lis)
 }
 
-func NewServer() Server {
-	return &server{}
+func NewServer(options *Options) Server {
+	return &server{
+		options: options,
+	}
 }

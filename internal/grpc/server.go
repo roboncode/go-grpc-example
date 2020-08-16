@@ -1,9 +1,12 @@
 package grpc
 
 import (
+	"errors"
 	"example/api"
 	"example/generated"
 	"example/internal/grpc/interceptors"
+	"example/util/check"
+	"fmt"
 	"github.com/grpc-ecosystem/go-grpc-prometheus"
 	"google.golang.org/grpc"
 	"net"
@@ -29,6 +32,10 @@ func (s *server) Instance() *grpc.Server {
 }
 
 func (s *server) Serve(server example.AppServiceServer) error {
+	if check.PortAvailable(api.GrpcPort()) == false {
+		return errors.New(fmt.Sprintf("GRPC address %s is in use", api.GrpcAddress()))
+	}
+
 	lis, err := net.Listen("tcp", api.GrpcAddress())
 	if err != nil {
 		return err

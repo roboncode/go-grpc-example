@@ -13,16 +13,34 @@ import (
 var conn *grpc.ClientConn
 
 var (
-	grpcAddr = env.Var("EXAMPLE_GRPC_ADDR").Default(":8080").Desc("gRPC address").String()
-	httpAddr = env.Var("EXAMPLE_HTTP_ADDR").Default(":3000").Desc("HTTP address").String()
+	grpcHost = env.Var("EXAMPLE_GRPC_HOST").Default("localhost").Desc("gRPC host").String()
+	grpcPort = env.Var("EXAMPLE_GRPC_PORT").Default("8080").Desc("gRPC port").String()
+	httpHost = env.Var("EXAMPLE_HTTP_ADDR").Default("localhost").Desc("HTTP address").String()
+	httpPort = env.Var("EXAMPLE_HTTP_PORT").Default("3000").Desc("HTTP port").String()
 )
 
+func GrpcHost() string {
+	return grpcHost
+}
+
+func GrpcPort() string {
+	return grpcPort
+}
+
 func GrpcAddress() string {
-	return grpcAddr
+	return grpcHost + ":" + grpcPort
+}
+
+func HttpHost() string {
+	return httpHost
+}
+
+func HttpPort() string {
+	return httpPort
 }
 
 func HttpAddress() string {
-	return httpAddr
+	return httpHost + ":" + httpPort
 }
 
 func Connect(address string) (*grpc.ClientConn, error) {

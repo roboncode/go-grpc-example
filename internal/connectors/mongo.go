@@ -1,4 +1,4 @@
-package connections
+package connectors
 
 import (
 	"context"
@@ -17,22 +17,22 @@ var (
 	MongoDatabase    = env.Var("MONGO_DATABASE").Default("default").Desc("mongo database").String()
 )
 
-type MongoConnection interface {
+type MongoConnector interface {
 	Init() error
 	Connect(address string, pingTimeout time.Duration) (*mongo.Client, error)
 	GetDatabase() *mongo.Database
 }
 
-type mongoConnection struct {
+type mongoConnector struct {
 	client   *mongo.Client
 	database *mongo.Database
 }
 
-func (m *mongoConnection) GetDatabase() *mongo.Database {
+func (m *mongoConnector) GetDatabase() *mongo.Database {
 	return m.database
 }
 
-func (m *mongoConnection) Init() error {
+func (m *mongoConnector) Init() error {
 	mongoClient, err := m.Connect(MongoAddress, MongoPingTimeout)
 	if err != nil {
 		return err
@@ -42,7 +42,7 @@ func (m *mongoConnection) Init() error {
 	return nil
 }
 
-func (m *mongoConnection) Connect(address string, pingTimeout time.Duration) (*mongo.Client, error) {
+func (m *mongoConnector) Connect(address string, pingTimeout time.Duration) (*mongo.Client, error) {
 	log.Infoln("connecting to mongo")
 
 	counter := 0
@@ -87,6 +87,6 @@ func (m *mongoConnection) Connect(address string, pingTimeout time.Duration) (*m
 	return client, nil
 }
 
-func NewMongoConnection() MongoConnection {
-	return &mongoConnection{}
+func NewMongoConnection() MongoConnector {
+	return &mongoConnector{}
 }

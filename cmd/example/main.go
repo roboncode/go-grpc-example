@@ -2,7 +2,7 @@ package main
 
 import (
 	"example/generated"
-	"example/internal/connections"
+	"example/internal/connectors"
 	"example/internal/grpc"
 	"example/internal/healthcheck"
 	"example/internal/http"
@@ -14,24 +14,21 @@ import (
 
 const ServiceName = "example"
 
-func connectToMongo() connections.MongoConnection {
-	mongoConnection := connections.NewMongoConnection()
+func connectToMongo() connectors.MongoConnector {
+	mongoConnection := connectors.NewMongoConnection()
 	if err := mongoConnection.Init(); err != nil {
 		log.Fatalln(err)
 	}
 	return mongoConnection
 }
 
-func setupStores(conn connections.MongoConnection) store.Store {
+func setupStores(conn connectors.MongoConnector) store.Store {
 	s := store.NewStore()
 	s.Set(store.PersonStoreName, store.NewPersonStore(conn.GetDatabase()))
 	return s
 }
 
-func setupGrpcServer(shutdown <-chan bool) grpc.Server {
-	conn := connectToMongo()
-	stores := setupStores(conn)
-
+func startGrpcServer(shutdown <-chan bool, stores store.Store) grpc.Server {
 	var personService = service.NewPersonService(stores)
 	var httpService = service.NewHttpService(personService)
 
@@ -52,7 +49,7 @@ func setupGrpcServer(shutdown <-chan bool) grpc.Server {
 	return grpcServer
 }
 
-func setupHealthCheckServer(shutdown <-chan bool, grpcServer grpc.Server) healthcheck.Server {
+func startHealthCheckServer(shutdown <-chan bool, grpcServer grpc.Server) healthcheck.Server {
 	healthCheckServer := healthcheck.NewServer(ServiceName)
 	go func() {
 		if err := healthCheckServer.Serve(grpcServer.Instance()); err != nil {
@@ -63,7 +60,7 @@ func setupHealthCheckServer(shutdown <-chan bool, grpcServer grpc.Server) health
 	return healthCheckServer
 }
 
-func setupHttpServer(shutdown <-chan bool) http.Server {
+func startHttpServer(shutdown <-chan bool) http.Server {
 	httpServer := http.NewServer()
 	go func() {
 		if err := httpServer.Serve(); err != nil {
@@ -77,9 +74,11 @@ func setupHttpServer(shutdown <-chan bool) http.Server {
 func main() {
 	shutdown := make(chan bool)
 
-	grpcServer := setupGrpcServer(shutdown)
-	setupHealthCheckServer(shutdown, grpcServer)
-	setupHttpServer(shutdown)
+	conn := connectToMongo()
+	stores := setupStores(conn)
+	grpcServer := startGrpcServer(shutdown, stores)
+	startHealthCheckServer(shutdown, grpcServer)
+	startHttpServer(shutdown)
 
 	<-shutdown
 }

@@ -51,23 +51,29 @@ First install health checker:
 go test ./...
 ```
 
-### References used for project
+### Learn more from these resources
 
 #### Go layout standards
 
-* https://github.com/golang-standards/project-layout
+* https://github.com/golang-standards/project-layouts
 
-#### gRPC 
+#### gRPC Basics
 
-* https://github.com/znly/docker-protobuf
-* https://github.com/grpc-ecosystem/grpc-gateway
 * https://medium.com/@lchenn/generate-grpc-and-protobuf-libraries-with-containers-c15ba4e4f3ad
 * https://github.com/grpc/grpc-go/blob/master/examples/helloworld/greeter_client/main.go
 * https://grpc.io/docs/quickstart/go/
 * https://grpc.io/docs/tutorials/basic/go/
 * https://github.com/gogo/protobuf
 
-#### Heath Check (for Kubernetes)
+#### gRPC compiler used
+
+* https://github.com/TheThingsIndustries/docker-protobuf
+
+#### Exposing gRPC through HTTP
+
+* https://github.com/grpc-ecosystem/grpc-gateway
+
+#### Heath Check (commonly used Kubernetes pods)
 
 * https://github.com/grpc-ecosystem/grpc-health-probe
 * https://developpaper.com/k8s-and-health-examination-best-practice-of-grpc-service-health-examination/

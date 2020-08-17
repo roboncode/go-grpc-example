@@ -11,6 +11,7 @@ Authored by: Rob Taylor <roboncode@gmail.com>
 
 ```shell script
 go mod download
+go mod vendor
 go run cmd/example/main.go
 ```
 

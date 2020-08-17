@@ -4,7 +4,7 @@ import (
 	"context"
 	"example/util/env"
 	"github.com/grpc-ecosystem/go-grpc-middleware/retry"
-	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"time"
@@ -44,7 +44,7 @@ func HttpAddress() string {
 }
 
 func Connect(address string) (*grpc.ClientConn, error) {
-	log.Infoln("connecting to grpc server...")
+	logrus.Infoln("connecting to grpc server...")
 	var err error
 	opts := []grpc_retry.CallOption{
 		grpc_retry.WithBackoff(grpc_retry.BackoffExponential(100 * time.Millisecond)),

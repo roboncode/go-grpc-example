@@ -1,7 +1,7 @@
 package healthcheck
 
 import (
-	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
@@ -18,7 +18,7 @@ type server struct {
 
 func (p *server) Serve(grpcServer *grpc.Server) error {
 	healthpb.RegisterHealthServer(grpcServer, p.healthServer)
-	log.Infoln("health check enabled")
+	logrus.Infoln("health check enabled")
 	return nil
 }
 

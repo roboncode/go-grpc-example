@@ -6,7 +6,7 @@ import (
 	"github.com/grpc-ecosystem/go-grpc-prometheus"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 	"net/http"
 )
 
@@ -37,7 +37,7 @@ func NewServer(grpcServer grpc.Server) {
 	// Start your http server for prometheus.
 	go func() {
 		if err := httpServer.ListenAndServe(); err != nil {
-			log.Warnln("unable to start prometheus http server")
+			logrus.Warnln("unable to start prometheus http server")
 		}
 	}()
 }

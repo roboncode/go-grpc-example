@@ -8,7 +8,7 @@ import (
 	"example/internal/http"
 	"example/internal/service"
 	"example/internal/store"
-	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 	googleGrpc "google.golang.org/grpc"
 )
 
@@ -17,7 +17,7 @@ const ServiceName = "example"
 func connectToMongo() connectors.MongoConnector {
 	mongoConnection := connectors.NewMongoConnection()
 	if err := mongoConnection.Init(); err != nil {
-		log.Fatalln(err)
+		logrus.Fatalln(err)
 	}
 	return mongoConnection
 }
@@ -42,7 +42,7 @@ func startGrpcServer(shutdown <-chan bool, stores store.Store) grpc.Server {
 	grpcServer := grpc.NewServer(&opts)
 	go func() {
 		if err := grpcServer.Serve(); err != nil {
-			defer log.Fatalln(err)
+			defer logrus.Fatalln(err)
 			<-shutdown
 		}
 	}()
@@ -53,7 +53,7 @@ func startHealthCheckServer(shutdown <-chan bool, grpcServer grpc.Server) health
 	healthCheckServer := healthcheck.NewServer(ServiceName)
 	go func() {
 		if err := healthCheckServer.Serve(grpcServer.Instance()); err != nil {
-			log.Fatalln(err)
+			logrus.Fatalln(err)
 			<-shutdown
 		}
 	}()
@@ -64,7 +64,7 @@ func startHttpServer(shutdown <-chan bool) http.Server {
 	httpServer := http.NewServer()
 	go func() {
 		if err := httpServer.Serve(); err != nil {
-			log.Fatalln(err)
+			logrus.Fatalln(err)
 			<-shutdown
 		}
 	}()

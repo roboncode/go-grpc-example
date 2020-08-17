@@ -1,37 +1,57 @@
-# HelloWorld gRPC Generation
+# Sample gRPC Service in Go
+
+The following gRPC sample project is built in Go and connects to a MongoDB. The project also
+exposes the services as HTTP. In the examples directory you will see both gRPC and HTTP client samples.
+
+Authored by: Rob Taylor <roboncode@gmail.com>
 
 ## Getting Started
 
-### Running from project
+### Running service from CLI
 
 ```shell script
 go mod download
 go run cmd/example/main.go
 ```
 
-### Running as docker container
+### Running as docker container (using docker-compose)
 
 ```shell script
-docker build -t example .
-docker run example
+make docker
+make compose
 ```
 
-### Running with docker-compose
+### Building an executable
 
 ```shell script
-docker-compose up --build
+make
+./bin/example
 ```
 
-### Testing service with gRPC client
+### Running example gRPC and HTTP clients
 
-Be sure the service is running
+Be sure the service is running using one of the methods above
 
 ```shell script
-go run test/main.go
+go run examples/main.go
 ```
 
+### Running HealthCheck
 
-### References
+First install health checker: 
+* https://github.com/grpc-ecosystem/grpc-health-probe
+
+```shell script
+~/go/bin/grpc-health-probe -addr=localhost:8080
+```
+
+### Run tests
+
+```shell script
+go test ./...
+```
+
+### References used for project
 
 #### Go layout standards
 

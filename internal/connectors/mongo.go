@@ -4,7 +4,7 @@ import (
 	"context"
 	"example/util/env"
 	"fmt"
-	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -43,7 +43,7 @@ func (m *mongoConnector) Init() error {
 }
 
 func (m *mongoConnector) Connect(address string, pingTimeout time.Duration) (*mongo.Client, error) {
-	log.Infoln("connecting to mongo")
+	logrus.Infoln("connecting to mongo")
 
 	counter := 0
 	ticker := time.NewTicker(1 * time.Second)
@@ -64,7 +64,7 @@ func (m *mongoConnector) Connect(address string, pingTimeout time.Duration) (*mo
 	if err != nil {
 		done <- true
 		fmt.Println()
-		log.Fatalln("failed to connect to mongo", err)
+		logrus.Fatalln("failed to connect to mongo", err)
 		return nil, err
 	}
 	ctx, _ := context.WithTimeout(context.Background(), pingTimeout*time.Second)
@@ -76,13 +76,13 @@ func (m *mongoConnector) Connect(address string, pingTimeout time.Duration) (*mo
 	if err != nil {
 		done <- true
 		fmt.Println()
-		log.Fatalln("mongo health check failed", err)
+		logrus.Fatalln("mongo health check failed", err)
 		return nil, err
 	}
 
 	done <- true
 	fmt.Println()
-	log.Infoln("connected to mongo")
+	logrus.Infoln("connected to mongo")
 
 	return client, nil
 }

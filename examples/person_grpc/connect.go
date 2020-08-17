@@ -2,7 +2,7 @@ package person_grpc
 
 import (
 	"example/api"
-	example "example/generated"
+	"example/generated"
 	"github.com/sirupsen/logrus"
 )
 

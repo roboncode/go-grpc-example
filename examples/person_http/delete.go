@@ -2,7 +2,7 @@ package person_http
 
 import (
 	"example/api"
-	example "example/generated"
+	"example/generated"
 	"fmt"
 	"github.com/go-resty/resty/v2"
 	"github.com/sirupsen/logrus"

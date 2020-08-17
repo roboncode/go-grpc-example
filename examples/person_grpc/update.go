@@ -3,7 +3,7 @@ package person_grpc
 import (
 	"context"
 	"encoding/json"
-	example "example/generated"
+	"example/generated"
 	"github.com/sirupsen/logrus"
 )
 

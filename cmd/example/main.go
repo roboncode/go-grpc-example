@@ -2,12 +2,12 @@ package main
 
 import (
 	"example/generated"
-	"example/internal/connectors"
 	"example/internal/servers/grpc"
 	"example/internal/servers/healthcheck"
 	"example/internal/servers/http"
 	"example/internal/services"
 	"example/internal/store"
+	"example/internal/store/connectors"
 	"github.com/sirupsen/logrus"
 	googleGrpc "google.golang.org/grpc"
 )

@@ -3,9 +3,9 @@ package store
 import (
 	"context"
 	"example/internal/models"
-	"example/internal/types/fieldtype"
-	"example/internal/types/mongotype"
-	"example/internal/types/objecttype"
+	"example/internal/store/types/fieldtype"
+	"example/internal/store/types/mongotype"
+	"example/internal/store/types/objecttype"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"

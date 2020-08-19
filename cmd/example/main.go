@@ -3,10 +3,10 @@ package main
 import (
 	"example/generated"
 	"example/internal/connectors"
-	"example/internal/grpc"
-	"example/internal/healthcheck"
-	"example/internal/http"
-	"example/internal/service"
+	"example/internal/servers/grpc"
+	"example/internal/servers/healthcheck"
+	"example/internal/servers/http"
+	"example/internal/services"
 	"example/internal/store"
 	"github.com/sirupsen/logrus"
 	googleGrpc "google.golang.org/grpc"
@@ -22,15 +22,13 @@ func connectToMongo() connectors.MongoConnector {
 	return mongoConnection
 }
 
-func setupStores(conn connectors.MongoConnector) store.Store {
-	s := store.NewStore()
-	s.Set(store.PersonStoreName, store.NewPersonStore(conn.GetDatabase()))
-	return s
+func setupStores(conn connectors.MongoConnector) {
+	store.Instance().Person = store.NewPersonStore(conn.GetDatabase())
 }
 
-func startGrpcServer(shutdown <-chan bool, stores store.Store) grpc.Server {
-	var personService = service.NewPersonService(stores)
-	var httpService = service.NewHttpService(personService)
+func startGrpcServer(shutdown <-chan bool) grpc.Server {
+	var personService = services.NewPersonService()
+	var httpService = services.NewHttpService(personService)
 
 	var opts = grpc.Options{
 		ServiceRegistration: func(s *googleGrpc.Server) {
@@ -75,8 +73,8 @@ func main() {
 	shutdown := make(chan bool)
 
 	conn := connectToMongo()
-	stores := setupStores(conn)
-	grpcServer := startGrpcServer(shutdown, stores)
+	setupStores(conn)
+	grpcServer := startGrpcServer(shutdown)
 	startHealthCheckServer(shutdown, grpcServer)
 	startHttpServer(shutdown)
 

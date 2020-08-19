@@ -2,6 +2,7 @@ package store
 
 import (
 	"context"
+	"example/internal/models"
 	"example/internal/types/fieldtype"
 	"example/internal/types/mongotype"
 	"example/internal/types/objecttype"
@@ -12,17 +13,6 @@ import (
 	"time"
 )
 
-const PersonStoreName = "Person"
-
-type Person struct {
-	Id        *primitive.ObjectID `bson:"_id,omitempty"`
-	Name      string              `bson:"name"`
-	Email     string              `bson:"email"`
-	Status    int32               `bson:"status"`
-	CreatedAt *time.Time          `bson:"created_at,omitempty"`
-	UpdatedAt *time.Time          `bson:"updated_at,omitempty"`
-}
-
 type PersonFilters struct {
 	Status int32 `bson:"status,omitempty"`
 	Skip   int64 `bson:"skip,omitempty"`
@@ -30,10 +20,10 @@ type PersonFilters struct {
 }
 
 type PersonStore interface {
-	CreatePerson(person *Person) error
-	GetPerson(id string) (*Person, error)
-	GetPersons(filters *PersonFilters) ([]Person, error)
-	UpdatePerson(id string, person *Person) error
+	CreatePerson(person *models.Person) error
+	GetPerson(id string) (*models.Person, error)
+	GetPersons(filters *PersonFilters) ([]models.Person, error)
+	UpdatePerson(id string, person *models.Person) error
 	DeleteRequest(id string) error
 }
 
@@ -41,7 +31,7 @@ type personStore struct {
 	collection *mongo.Collection
 }
 
-func (s *personStore) CreatePerson(person *Person) error {
+func (s *personStore) CreatePerson(person *models.Person) error {
 	var now = time.Now()
 	person.CreatedAt = &now
 	person.UpdatedAt = &now
@@ -54,13 +44,13 @@ func (s *personStore) CreatePerson(person *Person) error {
 	return nil
 }
 
-func (s *personStore) GetPerson(id string) (*Person, error) {
+func (s *personStore) GetPerson(id string) (*models.Person, error) {
 	oid, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
 	}
 	result := s.collection.FindOne(context.Background(), bson.M{fieldtype.Id: oid})
-	var person Person
+	var person models.Person
 	if err := result.Decode(&person); err != nil {
 		//return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Could not find Person with Object Id %s: %v", id), err)
 		return nil, err
@@ -68,7 +58,7 @@ func (s *personStore) GetPerson(id string) (*Person, error) {
 	return &person, nil
 }
 
-func (s *personStore) GetPersons(personFilters *PersonFilters) ([]Person, error) {
+func (s *personStore) GetPersons(personFilters *PersonFilters) ([]models.Person, error) {
 	query := bson.M{}
 	if personFilters.Status > 0 {
 		query[fieldtype.Status] = personFilters.Status
@@ -85,10 +75,10 @@ func (s *personStore) GetPersons(personFilters *PersonFilters) ([]Person, error)
 	// An expression with defer will be called at the end of the function
 	defer cursor.Close(context.Background())
 
-	var persons = make([]Person, 0)
+	var persons = make([]models.Person, 0)
 	// cursor.Next() returns a boolean, if false there are no more items and loop will break
 	for cursor.Next(context.Background()) {
-		var person Person
+		var person models.Person
 		// Decode the data at the current pointer and write it to data
 		err := cursor.Decode(&person)
 		// check error
@@ -100,7 +90,7 @@ func (s *personStore) GetPersons(personFilters *PersonFilters) ([]Person, error)
 	return persons, nil
 }
 
-func (s *personStore) UpdatePerson(id string, person *Person) error {
+func (s *personStore) UpdatePerson(id string, person *models.Person) error {
 	oid, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return err
@@ -114,7 +104,7 @@ func (s *personStore) UpdatePerson(id string, person *Person) error {
 	result := s.collection.FindOneAndUpdate(context.Background(), filter, bson.M{mongotype.SET: person}, options.FindOneAndUpdate().SetReturnDocument(1))
 
 	// Decode result and write it to 'data'
-	data := Person{}
+	data := models.Person{}
 	err = result.Decode(&data)
 	if err != nil {
 		return err

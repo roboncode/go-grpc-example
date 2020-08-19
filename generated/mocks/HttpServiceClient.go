@@ -4,7 +4,7 @@ package mocks
 
 import context "context"
 import emptypb "google.golang.org/protobuf/types/known/emptypb"
-import "example/generated"
+import example "example/generated"
 import grpc "google.golang.org/grpc"
 import mock "github.com/stretchr/testify/mock"
 

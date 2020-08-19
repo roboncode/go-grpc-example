@@ -1,8 +1,9 @@
-package service
+package services
 
 import (
 	"context"
 	"example/generated"
+	"example/internal/models"
 	"example/internal/store"
 	"example/internal/store/mocks"
 	"example/util/transform"
@@ -14,7 +15,7 @@ import (
 )
 
 var now = time.Now()
-var personItem = store.Person{
+var personItem = models.Person{
 	Id:        transform.ToObjectId("5f35832b7913cffd5a329af7"),
 	Status:    int32(example.Status_ACTIVE),
 	Name:      "John Smith",
@@ -26,7 +27,7 @@ var personItem = store.Person{
 func newPersonStore() store.PersonStore {
 	var mockStore = mocks.PersonStore{}
 	//CreatePerson(person *Person) error
-	mockStore.On("CreatePerson", mock.Anything).Return(func(person *store.Person) error {
+	mockStore.On("CreatePerson", mock.Anything).Return(func(person *models.Person) error {
 		person.Id = personItem.Id
 		person.CreatedAt = personItem.CreatedAt
 		person.UpdatedAt = personItem.UpdatedAt
@@ -35,8 +36,8 @@ func newPersonStore() store.PersonStore {
 	//GetPerson(id string) (*Person, error)
 	mockStore.On("GetPerson", mock.Anything).Return(&personItem, nil)
 	//GetPersons(filters *PersonFilters) ([]Person, error)
-	mockStore.On("GetPersons", mock.Anything).Return(func(filters *store.PersonFilters) []store.Person {
-		var persons = make([]store.Person, 0)
+	mockStore.On("GetPersons", mock.Anything).Return(func(filters *store.PersonFilters) []models.Person {
+		var persons = make([]models.Person, 0)
 		persons = append(persons, personItem)
 		return persons
 	}, nil)
@@ -53,9 +54,8 @@ type TestServiceSuite struct {
 }
 
 func (p *TestServiceSuite) SetupTest() {
-	var personStore = store.NewStore()
-	personStore.Set(store.PersonStoreName, newPersonStore())
-	p.server = NewPersonService(personStore)
+	store.Instance().Person = newPersonStore()
+	p.server = NewPersonService()
 }
 
 func (p *TestServiceSuite) TestCreatePerson() {

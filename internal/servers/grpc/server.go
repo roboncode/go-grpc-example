@@ -3,7 +3,7 @@ package grpc
 import (
 	"errors"
 	"example/api"
-	"example/internal/grpc/interceptors"
+	"example/internal/servers/grpc/interceptors"
 	"example/util/check"
 	"fmt"
 	"github.com/grpc-ecosystem/go-grpc-prometheus"
